@@ -1,110 +1,157 @@
 .hero-banner {
   flex: 1;
   background: linear-gradient(120deg, #ffffff 40%, #1a73e8 100%);
-  border-radius: 12px;
-  padding: 40px;
+  padding: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
-  overflow: hidden;
-  min-height: 280px;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
 }
+
 
 .hero-content {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 1.5rem;
+  z-index: 2;
+  flex: 1;
+  max-width: 800px;
 }
 
 .hero-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 8px;
 }
 
 .logo-icon {
-  font-size: 32px;
+  font-size: 40px;
 }
 
 .hero-logo h1 {
-  font-size: 40px;
+  font-size: clamp(24px, 4vw, 42px);
   color: black;
-  display: block;
-  font-weight: bold;
+  font-weight: 800;
+  margin-bottom: 4px;
 }
 
 .hero-logo p {
-  font-size: 15px;
-  color: #777;
-  font-style:normal;
-  font-weight:bold;
+  font-size: clamp(14px, 1.2vw, 18px);
+  color: #555;
+  font-weight: 600;
 }
 
 .prebooking-text {
-  font-size: 70px;
-  font-weight: 700;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800;
   color: #111;
-  margin-left: 60px;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  
+  margin: 0;
 }
 
 .NEB {
-  font-size: 200px;
-  font-weight: 900;
+  font-size: clamp(60px, 12vw, 150px);
+  font-weight: 950;
   color: #e53935;
-  line-height: 1;
-  letter-spacing: 4px;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  text-align: center;
+  line-height: 0.9;
+  letter-spacing: -2px;
 }
 
 .management-text {
-  font-size: 60px;
+  font-size: clamp(24px, 3.5vw, 42px);
   font-weight: 700;
   color: #111;
-  letter-spacing: 2px;
-  margin-left: 60px;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-
+  letter-spacing: 1px;
 }
 
-.prebook-btn{
-  margin-top: 14px;
-  background: #1a73e8;
+.prebook-btn {
+  background: var(--primary-color);
   color: white;
   border: none;
-  padding: 12px 28px ;
-  border-radius: 6px;
-  font-size: 15px;
-  font-weight: 600;
+  padding: 16px 40px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
   cursor: pointer;
   width: fit-content;
-  transition: background 0.2s;
-  margin-left: 60px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 15px -3px rgba(26, 115, 232, 0.3);
 }
 
-
 .prebook-btn:hover {
-  background: #1558c0;
+  background: var(--secondary-color);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(26, 115, 232, 0.4);
 }
 
 .hero-right {
   position: relative;
-  width: 320px;
-  height: 260px;
+  width: 40%;
+  max-width: 500px;
+  aspect-ratio: 1;
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blue-shape {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(26, 115, 232, 0.08);
+  border-radius: 50%;
+  z-index: 0;
 }
 
 .student-img {
-  position: absolute;
-  top: 10px;
-  right: 0px;
-  width: 240px;
-  height: 240px;
-  object-fit: cover;
-  border-radius: 20px;  
-  z-index: 1;                 
+  position: relative;
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  z-index: 1;
 }
+
+
+@media (max-width: 1200px) {
+  .NEB {
+    font-size: 100px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero-banner {
+    flex-direction: column;
+    padding: 40px 24px;
+    text-align: center;
+    align-items: center;
+    height: auto;
+    overflow-y: visible;
+  }
+
+  .hero-content {
+    align-items: center;
+  }
+
+  .hero-logo {
+    justify-content: center;
+  }
+
+  .prebook-btn {
+    margin: 0 auto;
+  }
+
+  .hero-right {
+    margin-top: 40px;
+    width: 80%;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-banner {
+    padding: 30px 16px;
+  }
+}

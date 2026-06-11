@@ -1,12 +1,16 @@
 import React from 'react';
 import './HeroBanner.css';
 
+
+
 function HeroBanner() {
     return(
         <div className="hero-banner">
             <div className="hero-content">
                 <div className="hero-logo">
-                    <span className = "logo-icon"> ------</span>
+                    <span className = "logo-icon">
+                    <span>-----</span>
+                    </span>
                  <div>
                     <h1>Utkrista Shikshya</h1>
                     <p>"Quality Education, Affordable Excellence"</p>
@@ -30,4 +34,5 @@ function HeroBanner() {
         </div>
     )
 }
+
 export default HeroBanner;

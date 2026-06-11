@@ -5,19 +5,15 @@ import HeroBanner from './components/HeroBanner';
 
 function App() {
   return (
-     <div>
+     <div className="app-wrapper">
       <Navbar />
-      <div style={{
-        display: 'flex',        
-        flexDirection: 'row',   
-        gap: '16px',
-        alignItems: 'flex-start'
-      }}>
+      <div className="main-container">
         <Sidebar />
         <HeroBanner />
       </div>
     </div>
   );
 }
+
 
 export default App;

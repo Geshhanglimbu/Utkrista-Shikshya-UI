@@ -9,7 +9,7 @@ const courses = [
   'Grade XII: Computer Science',
   'Grade XII: Business Math',
 ];
-function sidebar() {
+function Sidebar() {
     return (
      <aside className="sidebar">
         <h3>Browse Courses</h3>
