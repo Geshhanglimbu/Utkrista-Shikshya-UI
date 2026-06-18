@@ -9,7 +9,7 @@ function HeroBanner() {
             <div className="hero-content">
                 <div className="hero-logo">
                     <span className = "logo-icon">
-                    <span>-----</span>
+                    <span>---</span>
                     </span>
                  <div>
                     <h1>Utkrista Shikshya</h1>
