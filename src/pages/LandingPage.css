@@ -39,6 +39,12 @@
   justify-content: center;
   box-shadow: 0 4px 12px var(--primary-glow);
 }
+.navbar__logo-icon img{
+  width: 42px;
+  height: 42px;
+  color: var(--white);
+  border-radius: var(--radius-xl);
+}
 
 .navbar__logo-text {
   font-family: 'Outfit', sans-serif;
@@ -291,6 +297,12 @@
   color: var(--body);
   margin-bottom: var(--space-2);
 }
+.hero__card-brand-icon img {
+  width: 34px;
+  height: 34px;
+  border-radius:10px;
+  object-fit: cover;
+}
 
 /* ── STATS SECTION ──────────────────────────────── */
 .stats {
@@ -409,6 +421,8 @@
 
 .course-card__thumb--dev { background: linear-gradient(135deg, #3B82F6, #1E4ED8); }
 .course-card__thumb--design { background: linear-gradient(135deg, #8B5CF6, #6D28D9); }
+.course-card__thumb--language { background: linear-gradient(135deg, #8B5CF6, #6D28D9); }
+.course-card__thumb--academic { background: linear-gradient(135deg, #10B981, #047857); }
 .course-card__thumb--academic { background: linear-gradient(135deg, #10B981, #047857); }
 .course-card__thumb--cs { background: linear-gradient(135deg, #F59E0B, #DC2626); }
 
@@ -559,7 +573,7 @@
 }
 
 .testimonial-card__text {
-  font-size: 1.125rem;
+  font-size: 0.875rem;
   color: var(--dark-light);
   font-style: italic;
   margin-bottom: var(--space-8);

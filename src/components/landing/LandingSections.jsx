@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../common/Button";
+import { useNavigate } from "react-router-dom";
 
 /* ── HELPERS ── */
 const IconArrowRight = ({ size = 16, color = "currentColor" }) => (
@@ -43,11 +44,11 @@ export function StatsBar() {
 }
 
 /* ── FEATURED COURSES ── */
-function CourseCard({ thumbClass, emoji, tagLabel, tagClass, title, instructor, avatar, rating, reviews, hours }) {
+function CourseCard({ thumbClass, thumbSrc, tagLabel, tagClass, title, instructor, avatar, rating, reviews, hours }) {
   return (
     <div className="course-card">
       <div className={`course-card__thumb ${thumbClass}`}>
-        <span className="course-card__thumb-icon">{emoji}</span>
+        <img src={thumbSrc} alt={title} className="course-card__thumb-image" />
         <div className="course-card__thumb-tag">
           <span className={`tag ${tagClass}`}>{tagLabel}</span>
         </div>
@@ -71,10 +72,11 @@ function CourseCard({ thumbClass, emoji, tagLabel, tagClass, title, instructor, 
 
 export function FeaturedCourses() {
   const courses = [
-    { thumbClass: "course-card__thumb--dev", emoji: "💻", tagLabel: "Development", tagClass: "tag-dev", title: "MERN Stack Development: Master the Full Stack", instructor: "Anish Shrestha", avatar: "👨", rating: "4.8", reviews: "1.3k", hours: 45 },
-    { thumbClass: "course-card__thumb--design", emoji: "🎨", tagLabel: "Design", tagClass: "tag-design", title: "Mastering UI/UX Design: Principles & Practice", instructor: "Priya Thapa", avatar: "👩", rating: "4.8", reviews: "850", hours: 30 },
-    { thumbClass: "course-card__thumb--academic", emoji: "📐", tagLabel: "Academic", tagClass: "tag-academic", title: "Grade XII Mathematics: Complete Guide", instructor: "Dr. Ramesh Kunwar", avatar: "👨‍🏫", rating: "4.7", reviews: "2.5k", hours: 60 },
-    { thumbClass: "course-card__thumb--cs", emoji: "🐍", tagLabel: "Computer Science", tagClass: "tag-cs", title: "Advanced Computer Science with Python", instructor: "Sushant Bajracharya", avatar: "👨‍💻", rating: "4.8", reviews: "1.5k", hours: 40 },
+    { thumbClass: "course-card__thumb--dev", thumbSrc: "/website_development.jpeg" , tagLabel: "Development", tagClass: "tag-dev", title: "MERN Stack Development: Master the Full Stack", instructor: "Anish Shrestha", avatar: "👨", rating: "4.8", reviews: "1.3k", hours: 45 },
+    { thumbClass: "course-card__thumb--language", thumbSrc:"/korean_language.jpeg", tagLabel: "Design", tagClass: "tag-design", title: "Mastering Korean language", instructor: "Priya Thapa", avatar: "👩", rating: "4.8", reviews: "850", hours: 30 },
+    { thumbClass: "course-card__thumb--language", thumbSrc:"/Japanese_language.jpeg", tagLabel: "Design", tagClass: "tag-design", title: "Mastering japanese language", instructor: "hari Thapa", avatar: "👩", rating: "4.8", reviews: "850", hours: 30 },
+    { thumbClass: "course-card__thumb--academic",thumbSrc:"/NEB_Management.jpeg", tagLabel: "Academic", tagClass: "tag-academic", title: "Grade XII NEB Management", instructor: "Dr. Ramesh Kunwar", avatar: "👨‍🏫", rating: "4.7", reviews: "2.5k", hours: 60 },
+    { thumbClass: "course-card__thumb--academic",thumbSrc:"/NEB_Science.jpeg", tagLabel: "Academic", tagClass: "tag-academic", title: "Grade XII NEB Science", instructor: "Dr. ram limbu", avatar: "👨‍🏫", rating: "4.7", reviews: "2.5k", hours: 60 },
   ];
 
   return (
@@ -163,15 +165,17 @@ export function Testimonials() {
   );
 }
 
-/* ── CTA BANNER ── */
+/* ── CTA BANNER ── */  
 export function CTABanner() {
+  const navigate = useNavigate(); 
   return (
     <section className="section-padding">
       <div className="container">
         <div className="cta-banner">
           <h2 className="cta-banner__title">Ready to Start Your<br />Learning Journey?</h2>
           <div className="cta-banner__actions">
-            <Button size="lg" className="btn-white">Join for Free</Button>
+            <Button size="lg" className="btn-white"
+            onClick ={() => navigate("/register")}>Join for Free</Button>
             <Button size="lg" variant="outline" className="btn-outline-white">Browse All Courses</Button>
           </div>
         </div>
