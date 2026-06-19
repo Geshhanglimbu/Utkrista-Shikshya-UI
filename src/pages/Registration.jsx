@@ -58,29 +58,40 @@ function StepMobile({ phone, setPhone, onNext }) {
 
   setError("");
 
-     try{
+  try {
 
-        const res = await axios.post(
-            "http://localhost:5000/api/auth/send-otp",
-            {
-                phone
-            }
-        );
+    // API comes here later
 
-        console.log(res.data);
+    setOtpSent(true);
 
-        toast.success(res.data.message);
-
-        setOtpSent(true);
-
-    }
-    catch(err){
-
-        toast.error("Couldn't send OTP");
-
-    }
-
+  } catch (err) {
+    toast.error("Couldn't send OTP");
+  }
 };
+// after adding api this will be undo
+//    try{
+
+//         const res = await axios.post(
+//             "http://localhost:5000/api/auth/send-otp",
+//             {
+//                 phone
+//             }
+//         );
+
+//         console.log(res.data);
+
+//         toast.success(res.data.message);
+
+//         setOtpSent(true);
+
+//     }
+//     catch(err){
+
+//         toast.error("Couldn't send OTP");
+
+//     }
+
+// };
 
   return (
     <div className="auth-card" style={{ textAlign: 'center' }}>
