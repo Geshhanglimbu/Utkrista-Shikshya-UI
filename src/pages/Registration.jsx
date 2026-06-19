@@ -47,6 +47,41 @@ function RegistrationHeader({ step }) {
 /* ── Step 1: Mobile ── */
 function StepMobile({ phone, setPhone, onNext }) {
   const [error, setError] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+
+  const handleSendOTP = async () => {
+  if (phone.length !== 10) {
+    setError("Invalid phone number");
+    return;
+  }
+
+  setError("");
+
+     try{
+
+        const res = await axios.post(
+            "http://localhost:5000/api/auth/send-otp",
+            {
+                phone
+            }
+        );
+
+        console.log(res.data);
+
+        toast.success(res.data.message);
+
+        setOtpSent(true);
+
+    }
+    catch(err){
+
+        toast.error("Couldn't send OTP");
+
+    }
+
+};
+
   return (
     <div className="auth-card" style={{ textAlign: 'center' }}>
       <div className="auth-brand__icon" style={{ borderRadius: 20, width: 72, height: 72, background: '#F0F4FF' }}>
@@ -76,10 +111,31 @@ function StepMobile({ phone, setPhone, onNext }) {
         <IconInfo size={16} />
         <span style={{ fontSize: 12 }}>You will receive a 6-digit OTP code shortly.</span>
       </div>
-      
-      <button className="btn btn-primary btn-full" onClick={() => phone.length === 10 ? onNext() : setError("Invalid number")} style={{ padding: 16, borderRadius: 16 }}>
-        Send OTP <IconSend size={18} color="#fff" />
-      </button>
+
+      {/* OTP Input - only shows after OTP is sent */}
+{otpSent && (
+  <div className="field">
+    <label className="field__label">Enter OTP</label>
+
+    <div className="input-wrap">
+      <input
+        type="text"
+        placeholder="Enter 6-digit OTP"
+        maxLength={6}
+        value={otp}
+        onChange={(e) => setOtp(e.target.value)}
+      />
+    </div>
+  </div>
+)}
+
+          
+      <button
+      className="btn btn-primary btn-full"
+      onClick={handleSendOTP}
+      style={{ padding: 16, borderRadius: 16 }}>
+      Send OTP
+    </button>
     </div>
   );
 }
