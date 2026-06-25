@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Auth.css";
 import { 
-  IconCap, IconChevronLeft, IconMail, IconLock, IconEye, IconEyeOff,
+  IconCap, IconChevronLeft, IconMail, IconLock, IconEye, IconEyeOff, IconUser,
   IconAlertTriangle, IconGoogle, IconArrowRight, IconCheckBig, IconAlertCircle
 } from "../components/auth/AuthIcons";
 import axios from "axios";
@@ -61,7 +61,7 @@ function LoginSuccess({ firstName = "Arjun" }) {
 /* ── Main Login Page ── */
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -73,7 +73,7 @@ export default function Login() {
   e.preventDefault();
 
   const nextErrs = {};
-  if (!email) nextErrs.email = "Email address is required";
+  if (!username) nextErrs.username = "Username is required";
   if (!password) nextErrs.password = "Password is required";
 
   if (Object.keys(nextErrs).length > 0) {
@@ -84,11 +84,14 @@ export default function Login() {
 
   try {
     setStatus("loading");
-
-    const res = await axios.post("http://localhost:5000/api/auth/login", {
-      email,
-      password,
-    });
+        const res = await axios.post(
+      "https://elp.mytufan.com/api/v1/auth/login",
+      {
+        username: username, // or rename the state variable
+        password,
+        browserInfo: navigator.userAgent
+      }
+    );
 
     // store token (important)
     localStorage.setItem("token", res.data.token);
@@ -109,7 +112,7 @@ export default function Login() {
   }
 };
 
-  if (status === "success") return <LoginSuccess firstName={email.split('@')[0] || "Student"} />;
+  if (status === "success") return <LoginSuccess firstName={username || "Student"} />;
 
   return (
     <div className="auth-page">
@@ -143,18 +146,18 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} noValidate>
             <div className="field">
-              <label className="field__label">Email Address</label>
-              <div className={`input-wrap ${errors.email ? 'input-wrap--error' : ''}`}>
-                <span className="input-wrap__icon"><IconMail size={16} /></span>
+              <label className="field__label">Username</label>
+              <div className={`input-wrap ${errors.username ? 'input-wrap--error' : ''}`}>
+                <span className="input-wrap__icon"><IconUser size={16} /></span>
                 <input
-                  type="email"
-                  placeholder="Email Address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
-                {errors.email && <span className="input-wrap__action" style={{ paddingRight: 12 }}><IconAlertCircle size={16} /></span>}
+                {errors.username && <span className="input-wrap__action" style={{ paddingRight: 12 }}><IconAlertCircle size={16} /></span>}
               </div>
-              {errors.email && <p className="field__error">{errors.email}</p>}
+              {errors.username && <p className="field__error">{errors.username}</p>}
             </div>
 
             <div className="field">

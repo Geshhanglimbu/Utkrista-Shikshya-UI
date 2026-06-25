@@ -58,40 +58,33 @@ function StepMobile({ phone, setPhone, onNext }) {
 
   setError("");
 
-  try {
-
-    // API comes here later
-
-    setOtpSent(true);
-
-  } catch (err) {
-    toast.error("Couldn't send OTP");
-  }
-};
 // after adding api this will be undo
-//    try{
+   try{
+      console.log("Phone being sent:", phone);
+        const res = await axios.post(
+            "https://elp.mytufan.com/api/v1/auth/get-phone-number",
+            {
+                mobilenumber: `+977${phone}`
+            }
+        );
 
-//         const res = await axios.post(
-//             "http://localhost:5000/api/auth/send-otp",
-//             {
-//                 phone
-//             }
-//         );
+        console.log(res.data);
 
-//         console.log(res.data);
+        toast.success(res.data.message);
 
-//         toast.success(res.data.message);
+        setOtpSent(true);
 
-//         setOtpSent(true);
+    }
+    catch (err) {
+      console.log("Full error:", err);
+      console.log("Status:", err.response?.status);
+      console.log("Response data:", JSON.stringify(err.response?.data, null, 2));
+      console.log("Request body:", { phone });
 
-//     }
-//     catch(err){
+      toast.error(err.response?.data?.message || "Couldn't send OTP");
+    }
 
-//         toast.error("Couldn't send OTP");
-
-//     }
-
-// };
+};
 
   return (
     <div className="auth-card" style={{ textAlign: 'center' }}>
@@ -156,8 +149,7 @@ function StepPersonal({ data, update, onNext }) {
   const [errors, setErrors] = useState({});
   const validate = () => {
     const e = {};
-    if (!data.firstName) e.firstName = "Required";
-    if (!data.lastName) e.lastName = "Required";
+    if (!data.name) e.name = "Required";
     if (!data.email) e.email = "Enter a valid email";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -171,16 +163,31 @@ function StepPersonal({ data, update, onNext }) {
       <div className="field__row" style={{ display: 'flex', gap: 12 }}>
         <div className="field" style={{ flex: 1 }}>
           <label className="field__label">First Name</label>
-          <div className={`input-wrap ${errors.firstName ? 'input-wrap--error' : ''}`}>
-            <input placeholder="First Name" value={data.firstName} onChange={e => update('firstName', e.target.value)} />
+          <div className={`input-wrap ${errors.name ? 'input-wrap--error' : ''}`}>
+            <input placeholder="First Name" value={data.name} onChange={e => update('name', e.target.value)} />
           </div>
         </div>
-        <div className="field" style={{ flex: 1 }}>
-          <label className="field__label">Last Name</label>
-          <div className={`input-wrap ${errors.lastName ? 'input-wrap--error' : ''}`}>
-            <input placeholder="Last Name" value={data.lastName} onChange={e => update('lastName', e.target.value)} />
-          </div>
-        </div>
+        <label>College Name</label>
+            <input
+                placeholder="College Name"
+                value={data.collegename}
+                onChange={(e)=>update("collegename", e.target.value)}
+            />
+                  <label>Faculty</label>
+
+          <select
+              value={data.faculty}
+              onChange={(e)=>update("faculty", e.target.value)}
+          >
+              <option value="">Select Faculty</option>
+              <option>Class 11 Science</option>
+              <option>Class 12 Science</option>
+              <option>Management</option>
+              <option>BCA</option>
+              <option>BSc CSIT</option>
+          </select>
+
+
       </div>
 
       <div className="field">
@@ -245,15 +252,17 @@ function StepSecurity({ data, update, onNext,phone, formData }) {
         return;
         }
 
-        const res = await axios.post("http://localhost:5000/api/auth/register", {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+       const res = await axios.post("https://elp.mytufan.com/api/v1/auth/register",
+    {
+        name: formData.name,
         email: formData.email,
-        phone: phone,
-        dob: formData.dob,
-        gender: formData.gender,
         password: data.password,
-        });
+        collegename: formData.collegename,
+        faculty: formData.faculty,
+        otp: formData.otp,
+        userAgent1: navigator.userAgent
+    }
+);
 
        toast.success(res.data.message || "Account created successfully!");
         onNext();
@@ -318,9 +327,15 @@ export default function Registration() {
   const [stage, setStage] = useState(1);
   const [phone, setPhone] = useState("");
   const [formData, setFormData] = useState({
-    firstName: "", lastName: "", email: "", dob: "", gender: "Male",
-    password: "", confirmPassword: "", agreed: false
-  });
+    name: "",
+    email: "",
+    collegename: "",
+    faculty: "",
+    otp: "",
+    password: "",
+    confirmPassword: "",
+    agreed: false
+});
 
   const update = (key, val) => setFormData(d => ({ ...d, [key]: val }));
 
