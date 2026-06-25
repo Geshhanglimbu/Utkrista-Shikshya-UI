@@ -45,10 +45,10 @@ function RegistrationHeader({ step }) {
 }
 
 /* ── Step 1: Mobile ── */
-function StepMobile({ phone, setPhone, onNext }) {
+function StepMobile({ phone, setPhone, formData, update, onNext }) {
   const [error, setError] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
+  const [verifying, setVerifying] = useState(false);
 
   const handleSendOTP = async () => {
   if (phone.length !== 10) {
@@ -60,11 +60,13 @@ function StepMobile({ phone, setPhone, onNext }) {
 
 // after adding api this will be undo
    try{
-      console.log("Phone being sent:", phone);
+      console.log({
+  mobileNo: phone
+});
         const res = await axios.post(
             "https://elp.mytufan.com/api/v1/auth/get-phone-number",
             {
-                mobilenumber: `+977${phone}`
+                mobileNo: phone
             }
         );
 
@@ -73,6 +75,7 @@ function StepMobile({ phone, setPhone, onNext }) {
         toast.success(res.data.message);
 
         setOtpSent(true);
+        
 
     }
     catch (err) {
@@ -86,6 +89,15 @@ function StepMobile({ phone, setPhone, onNext }) {
 
 };
 
+const handleVerifyOTP = () => {
+  if (formData.otp.length !== 6) {
+    toast.error("Enter a valid 6-digit OTP");
+    return;
+  }
+
+  toast.success("OTP verified (Frontend Testing)");
+  onNext();
+};
   return (
     <div className="auth-card" style={{ textAlign: 'center' }}>
       <div className="auth-brand__icon" style={{ borderRadius: 20, width: 72, height: 72, background: '#F0F4FF' }}>
@@ -116,7 +128,7 @@ function StepMobile({ phone, setPhone, onNext }) {
         <span style={{ fontSize: 12 }}>You will receive a 6-digit OTP code shortly.</span>
       </div>
 
-      {/* OTP Input - only shows after OTP is sent */}
+   {/* // opt inpput */}
 {otpSent && (
   <div className="field">
     <label className="field__label">Enter OTP</label>
@@ -126,20 +138,32 @@ function StepMobile({ phone, setPhone, onNext }) {
         type="text"
         placeholder="Enter 6-digit OTP"
         maxLength={6}
-        value={otp}
-        onChange={(e) => setOtp(e.target.value)}
-      />
+        value={formData.otp}
+        onChange={(e)=>update("otp", e.target.value)}
+        />
     </div>
   </div>
 )}
 
           
-      <button
-      className="btn btn-primary btn-full"
-      onClick={handleSendOTP}
-      style={{ padding: 16, borderRadius: 16 }}>
-      Send OTP
-    </button>
+    {!otpSent && (
+  <button
+    className="btn btn-primary btn-full"
+    onClick={handleSendOTP}
+  >
+    Send OTP
+  </button>
+)}
+
+{otpSent && (
+  <button
+    className="btn btn-primary btn-full"
+    onClick={handleVerifyOTP}
+    disabled={verifying}
+  >
+    {verifying ? "Verifying..." : "Verify OTP"}
+  </button>
+)}
     </div>
   );
 }
@@ -162,19 +186,20 @@ function StepPersonal({ data, update, onNext }) {
       
       <div className="field__row" style={{ display: 'flex', gap: 12 }}>
         <div className="field" style={{ flex: 1 }}>
-          <label className="field__label">First Name</label>
+          <label className="field__label">Name</label>
           <div className={`input-wrap ${errors.name ? 'input-wrap--error' : ''}`}>
-            <input placeholder="First Name" value={data.name} onChange={e => update('name', e.target.value)} />
+            <input placeholder="Full Name" value={data.name} onChange={e => update('name', e.target.value)} />
           </div>
-        </div>
-        <label>College Name</label>
+        <label className="field__label">College Name</label>
+        <div className={`input-wrap ${errors.name ? 'input-wrap--error' : ''}`}>
             <input
                 placeholder="College Name"
                 value={data.collegename}
                 onChange={(e)=>update("collegename", e.target.value)}
             />
-                  <label>Faculty</label>
-
+            </div>
+                  <label className="field__label">Faculty</label>
+                 
           <select
               value={data.faculty}
               onChange={(e)=>update("faculty", e.target.value)}
@@ -186,7 +211,7 @@ function StepPersonal({ data, update, onNext }) {
               <option>BCA</option>
               <option>BSc CSIT</option>
           </select>
-
+          </div>
 
       </div>
 
@@ -260,7 +285,8 @@ function StepSecurity({ data, update, onNext,phone, formData }) {
         collegename: formData.collegename,
         faculty: formData.faculty,
         otp: formData.otp,
-        userAgent1: navigator.userAgent
+        userAgent1: navigator.userAgent,
+        mobileNo: phone
     }
 );
 
@@ -334,7 +360,11 @@ export default function Registration() {
     otp: "",
     password: "",
     confirmPassword: "",
-    agreed: false
+    agreed: false,
+    phone: "",
+    dob: "",
+    gender: "",
+
 });
 
   const update = (key, val) => setFormData(d => ({ ...d, [key]: val }));
@@ -350,7 +380,7 @@ export default function Registration() {
 
         <RegistrationHeader step={stage} />
         
-        {stage === 1 && <StepMobile phone={phone} setPhone={setPhone} onNext={() => setStage(2)} />}
+        {stage === 1 && <StepMobile phone={phone} setPhone={setPhone} formData = {formData} update = {update} onNext={() => setStage(2)} />}
         {stage === 2 && <StepPersonalInfo data={formData} update={update} onNext={() => setStage(3)} />}
         {stage === 3 && <StepSecurity data={formData} update={update} phone={phone} formData={formData} onNext={() => navigate("/login")} />}
 
