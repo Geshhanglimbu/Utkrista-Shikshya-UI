@@ -12,6 +12,7 @@ import AdminDashboard from "./admin/pages/Dashboard";
 import { SidebarProvider } from "./admin/context/SidebarContext";
 import Categories from "./admin/pages/Categories";
 import Users from "./admin/pages/Users";
+import Content from "./admin/pages/Content";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="categories" element={<Categories />} />
              <Route path="users" element={<Users />} />
+             <Route path="content" element = {<Content />} />
 
             {/* later: users, payments, categories, etc. add here */}
           </Route>

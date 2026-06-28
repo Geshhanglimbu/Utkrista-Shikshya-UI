@@ -1,0 +1,7 @@
+.content-page__toolbar{display:flex;gap:12px;padding:16px;flex-wrap:wrap;margin-bottom:16px;}
+.content-type-tag{font-size:12px;font-weight:600;background:#F1F5F9;padding:4px 10px;border-radius:999px;color:var(--text-muted);}
+.upload-form{display:flex;flex-direction:column;gap:14px;font-size:13px;font-weight:600;}
+.upload-form input, .upload-form select{
+  margin-top:6px;width:100%;padding:10px 12px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);font-size:13px;font-weight:400;font-family:inherit;outline:none;
+}
