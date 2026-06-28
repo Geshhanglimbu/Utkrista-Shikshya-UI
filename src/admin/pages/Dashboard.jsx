@@ -2,16 +2,18 @@ import {
   Users, GraduationCap, BookOpenCheck, FolderKanban, CreditCard, Banknote,
   Video, FileCheck2, Plus, FilePlus2, ShieldCheck, CalendarClock
 } from 'lucide-react'
-import DashboardCard from '../components/DashboardCard'
-import ChartCard, { BarTrendChart, LineTrendChart, DonutChart } from '../components/ChartCard'
-import Badge from '../components/Badge'
 import {
   statsData, revenueTrend, registrationTrend, paymentStatusBreakdown,
   enrollmentDistribution, recentUsers, recentPayments, recentActivities, upcomingLiveClasses
 } from '../utils/dummyData'
 import './Dashboard.css'
+import DashboardCard from '../../components/admin/DashboardCard'
+import Badge from '../../components/admin/Badge'
+import ChartCard, { BarTrendChart, LineTrendChart, DonutChart } from '../../components/admin/ChartCard'
+
 
 export default function Dashboard() {
+    
   const cards = [
     { icon: Users, label: 'Total Users', value: statsData.totalUsers.toLocaleString(), trend: '+12%', trendUp: true, accent: '#2563EB' },
     { icon: GraduationCap, label: 'Teachers', value: statsData.teachers, trend: '+3%', trendUp: true, accent: '#7C3AED' },

@@ -7,17 +7,35 @@ import Registration from "./pages/Registration";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import AdminLayout from "./admin/layouts/AdminLayout";
+import AdminDashboard from "./admin/pages/Dashboard";
+import { SidebarProvider } from "./admin/context/SidebarContext";
+import Categories from "./admin/pages/Categories";
+import Users from "./admin/pages/Users";
+
 function App() {
   return (
-    <BrowserRouter>
-      <ToastContainer position="top-right" autoClose={3000} />
+    <SidebarProvider>
+      <BrowserRouter>
+        <ToastContainer position="top-right" autoClose={3000} />
 
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Registration />} />
-      </Routes>
-    </BrowserRouter>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Registration />} />
+
+          {/* Admin routes — wrapped inside AdminLayout */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="categories" element={<Categories />} />
+             <Route path="users" element={<Users />} />
+
+            {/* later: users, payments, categories, etc. add here */}
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </SidebarProvider>
   );
 }
 

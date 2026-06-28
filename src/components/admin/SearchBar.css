@@ -1,0 +1,9 @@
+.search-bar{
+  display:flex;align-items:center;gap:8px;
+  background:#fff;border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:9px 12px;
+  min-width:220px;transition:border-color .15s ease;
+}
+.search-bar:focus-within{border-color:var(--primary);}
+.search-bar__icon{color:var(--text-light);flex-shrink:0;}
+.search-bar input{border:none;outline:none;width:100%;font-size:14px;background:transparent;}

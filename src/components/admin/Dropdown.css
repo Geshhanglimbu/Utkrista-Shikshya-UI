@@ -1,0 +1,6 @@
+.dropdown{
+  padding:9px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);
+  background:#fff;font-size:13px;font-weight:500;color:var(--text);
+  outline:none;cursor:pointer;min-width:140px;
+}
+.dropdown:focus{border-color:var(--primary);}

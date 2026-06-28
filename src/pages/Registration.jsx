@@ -8,10 +8,11 @@ import {
 } from "../components/auth/AuthIcons";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { authService } from "../services/api";
 
 /* ── Step Header ── */
 function RegistrationHeader({ step }) {
-  const stepLabels = ["Mobile", "Personal", "Security"];
+  const stepLabels = ["Mobile Number verification", "Personal Details", "Security"];
   return (
     <div className="auth-topbar--dark">
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
@@ -63,10 +64,9 @@ function StepMobile({ phone, setPhone, formData, update, onNext }) {
       console.log({
   mobileNo: phone
 });
-        const res = await axios.post(
-            "https://elp.mytufan.com/api/v1/auth/get-phone-number",
+        const res = await authService.sendOtp(
             {
-                mobileNo: phone
+                mobileNo: phone,
             }
         );
 
@@ -277,7 +277,7 @@ function StepSecurity({ data, update, onNext,phone, formData }) {
         return;
         }
 
-       const res = await axios.post("https://elp.mytufan.com/api/v1/auth/register",
+       const res = await authService.register(
     {
         name: formData.name,
         email: formData.email,

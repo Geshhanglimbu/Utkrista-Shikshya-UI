@@ -7,6 +7,7 @@ import {
 } from "../components/auth/AuthIcons";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { authService } from "../services/api";
 
 /* ── Signing In Overlay ── */
 function SigningInOverlay() {
@@ -84,22 +85,31 @@ export default function Login() {
 
   try {
     setStatus("loading");
-        const res = await axios.post(
-      "https://elp.mytufan.com/api/v1/auth/login",
-      {
-        username: username, // or rename the state variable
-        password,
-        browserInfo: navigator.userAgent
-      }
-    );
+       const res = await authService.login({
+  username,
+  password,
+  browserInfo: navigator.userAgent,
+});
+
+console.log("Full Response:", res);
+console.log("Response Data:", res.data);
+console.log("Token:", res.data.token);
+  
 
     // store token (important)
     localStorage.setItem("token", res.data.token);
 
     setStatus("success");
-
+    
+//     setTimeout(() => {
+//   if (role === "ADMIN") {
+//     navigate("/admin/dashboard");
+//   } else {
+//     navigate("/student/dashboard");
+//   }
+// }, 1500);
     setTimeout(() => {
-      navigate("/landingPage");
+      navigate("/admin/dashboard");
     }, 1500);
 
   } catch (error) {

@@ -31,7 +31,7 @@ export function Navbar() {
   const location = useLocation();
   const navLinks = [
     { label: "Courses", path: "/courses" },
-    { label: "Categories", path: "/categories" },
+    { label: "Categories", path: "/admin/categories" },
     { label: "Instructors", path: "/instructors" },
     { label: "About", path: "/about" }
   ];

@@ -1,0 +1,66 @@
+.dash-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  border-color: var(--primary-glow);
+}
+
+.dash-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dash-card__icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-base);
+}
+
+.dash-card__trend {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.dash-card__trend.is-up {
+  color: var(--success);
+  background: #ECFDF5;
+}
+
+.dash-card__trend.is-down {
+  color: var(--error);
+  background: #FEF2F2;
+}
+
+.dash-card__value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--dark);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  font-family: 'Outfit', sans-serif;
+}
+
+.dash-card__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 6px;
+}
