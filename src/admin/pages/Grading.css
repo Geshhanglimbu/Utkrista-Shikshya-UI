@@ -1,0 +1,16 @@
+.grading-split{display:grid;grid-template-columns:1fr 1.1fr;gap:16px;}
+.grading-split__list{align-self:start;}
+.grading-split__detail{padding:20px;display:flex;flex-direction:column;gap:20px;}
+.grading-student{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.grading-preview{
+  background:#F8FAFC;border:1px solid var(--border);border-radius:var(--radius);
+  height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;color:var(--text-muted);font-size:13px;
+}
+.grading-form h4{margin:0 0 2px;font-size:15px;}
+.grading-form label{display:block;font-size:13px;font-weight:600;margin-bottom:14px;}
+.grading-form input, .grading-form textarea{
+  margin-top:6px;width:100%;padding:10px 12px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);font-size:13px;font-weight:400;font-family:inherit;outline:none;
+}
+@media (max-width: 1000px){ .grading-split{grid-template-columns:1fr;} }

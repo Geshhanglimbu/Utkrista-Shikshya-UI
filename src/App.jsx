@@ -13,6 +13,13 @@ import { SidebarProvider } from "./admin/context/SidebarContext";
 import Categories from "./admin/pages/Categories";
 import Users from "./admin/pages/Users";
 import Content from "./admin/pages/Content";
+import Payments from "./admin/pages/Payments";
+import Grading from "./admin/pages/Grading";
+import LiveClasses from "./admin/pages/LiveClasses";
+import Banner from "./admin/pages/Banner";
+import Settings from "./admin/pages/Settings";
+
+
 
 function App() {
   return (
@@ -32,6 +39,11 @@ function App() {
             <Route path="categories" element={<Categories />} />
              <Route path="users" element={<Users />} />
              <Route path="content" element = {<Content />} />
+             <Route path="payments" element = {<Payments />} />
+             <Route path="grading"  element = {<Grading />} />
+             <Route path="live-classes" element={<LiveClasses/>} />
+             <Route path="banner" element={<Banner/>} />
+             <Route path="settings" element={<Settings />} />
 
             {/* later: users, payments, categories, etc. add here */}
           </Route>

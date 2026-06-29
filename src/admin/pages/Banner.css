@@ -1,0 +1,15 @@
+.banner-upload{padding:24px;margin-bottom:24px;}
+.banner-section-title{display:flex;align-items:center;gap:8px;font-size:15px;margin:0 0 14px;}
+.banner-count{background:var(--info-bg);color:var(--primary);font-size:12px;padding:2px 8px;border-radius:999px;}
+.banner-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+.banner-card{overflow:hidden;}
+.banner-card__thumb{height:120px;background:var(--info-bg);display:flex;align-items:center;justify-content:center;color:var(--primary);}
+.banner-card__body{padding:14px 16px 4px;display:flex;flex-direction:column;gap:4px;}
+.banner-card__body strong{font-size:14px;}
+.banner-card__actions{display:flex;gap:6px;padding:14px 16px;}
+.banner-add-card{
+  border:2px dashed var(--border);border-radius:var(--radius);background:transparent;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  color:var(--text-muted);min-height:200px;transition:all .15s ease;
+}
+.banner-add-card:hover{border-color:var(--primary);color:var(--primary);background:var(--info-bg);}

@@ -1,0 +1,7 @@
+.settings-card{padding:24px;max-width:480px;}
+.settings-card h4{margin:0 0 18px;font-size:15px;}
+.settings-card label{display:block;font-size:13px;font-weight:600;margin-bottom:16px;}
+.settings-card input{
+  margin-top:6px;width:100%;padding:10px 12px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);font-size:13px;font-weight:400;font-family:inherit;outline:none;
+}

@@ -1,0 +1,7 @@
+.live-link{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--primary);font-weight:600;}
+.schedule-form{display:flex;flex-direction:column;gap:14px;font-size:13px;font-weight:600;}
+.schedule-form input, .schedule-form select{
+  margin-top:6px;width:100%;padding:10px 12px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);font-size:13px;font-weight:400;font-family:inherit;outline:none;
+}
+.schedule-form__row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
