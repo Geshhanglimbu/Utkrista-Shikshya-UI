@@ -14,3 +14,150 @@
 .user-detail dt{color:var(--text-muted);}
 .user-detail dd{margin:0;font-weight:600;}
 .user-detail__actions{display:flex;flex-wrap:wrap;gap:8px;}
+
+/* ===========================
+   Change Role Modal
+=========================== */
+
+.change-role-modal{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    padding:4px 0;
+}
+
+.change-role-modal h4{
+    margin:0;
+    font-size:18px;
+    font-weight:600;
+    color:var(--text);
+}
+
+.change-role-modal p{
+    margin:0;
+    color:var(--text-muted);
+    font-size:13px;
+}
+
+/* Search */
+
+.change-role-search{
+    display:flex;
+    gap:12px;
+    align-items:flex-end;
+}
+
+.change-role-search input{
+    flex:1;
+    height:42px;
+    padding:0 14px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--surface);
+    color:var(--text);
+    font-size:14px;
+    transition:.2s;
+}
+
+.change-role-search input::placeholder{
+    color:var(--text-muted);
+}
+
+.change-role-search input:focus{
+    outline:none;
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(59,130,246,.15);
+}
+
+/* User Card */
+
+.role-user{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:18px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--surface);
+}
+
+.role-user-avatar{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:var(--info-bg);
+    color:var(--primary);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    font-weight:700;
+    flex-shrink:0;
+}
+
+.role-user-info{
+    flex:1;
+}
+
+.role-user-info h5{
+    margin:0;
+    font-size:16px;
+    font-weight:600;
+}
+
+.role-user-info small{
+    display:block;
+    margin-top:4px;
+    color:var(--text-muted);
+    font-size:13px;
+}
+
+.role-badge{
+    display:inline-flex;
+    align-items:center;
+    margin-top:10px;
+    padding:5px 12px;
+    border-radius:999px;
+    background:var(--info-bg);
+    color:var(--primary);
+    font-size:12px;
+    font-weight:600;
+}
+
+/* Dropdown */
+
+.role-select{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.role-select label{
+    font-size:13px;
+    font-weight:600;
+    color:var(--text);
+}
+
+/* Responsive */
+
+@media (max-width:768px){
+
+    .change-role-search{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .change-role-search button{
+        width:100%;
+    }
+
+    .role-user{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .role-user-avatar{
+        margin-bottom:6px;
+    }
+
+}
