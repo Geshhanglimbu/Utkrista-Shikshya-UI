@@ -12,6 +12,7 @@ import { useEffect, useMemo, useState } from "react"
 
 import {
   userService,
+  contentService,
   categoryService,
   liveClassService
 } from "../../services/api"
@@ -21,8 +22,9 @@ export default function Dashboard() {
   const [categories, setCategories] = useState([])
   const [liveClasses, setLiveClasses] = useState([])
   const [loading, setLoading] = useState(true)
-
-  const loadDashboard = async () => {
+  const [categoryDistribution, setCategoryDistribution] = useState([])
+  
+const loadDashboard = async () => {
     setLoading(true)
     try {
       const [usersRes, categoriesRes, liveClassesRes] = await Promise.allSettled([
@@ -74,7 +76,43 @@ export default function Dashboard() {
     loadDashboard()
   }, [])
 
-  const teacherCount = useMemo(() => {
+
+  useEffect(() => {
+
+const loadCategoryCounts = async () => {
+    if (!Array.isArray(categories) || categories.length === 0) {
+      setCategoryDistribution([])
+      return
+    }
+
+    const palette = ['#2563EB', '#7C3AED', '#0891B2', '#16A34A', '#D97706', '#DC2626']
+
+    const results = await Promise.allSettled(
+      categories.slice(0, 6).map((c) => contentService.getByCategoryId(c.categoryId ?? c.id))
+    )
+
+    const withCounts = categories.slice(0, 6).map((c, i) => {
+      const res = results[i]
+      const posts = res.status === 'fulfilled'
+        ? (Array.isArray(res.value?.data) ? res.value.data : res.value?.data?.data || [])
+        : []
+
+     return {
+        id: c.categoryId ?? c.id,
+        label: c.categoryTitle || c.name || 'Untitled',
+        value: posts.length,
+        color: palette[i % palette.length]
+      }
+    })
+
+    setCategoryDistribution(withCounts)
+  }
+
+  loadCategoryCounts()
+}, [categories])
+
+  
+const teacherCount = useMemo(() => {
     if (!Array.isArray(users)) return 0
     return users.filter(u => {
       const roleName = u.roles?.[0]?.name?.toUpperCase() || u.role?.toUpperCase() || ''
@@ -82,7 +120,7 @@ export default function Dashboard() {
     }).length
   }, [users])
 
-  const studentCount = useMemo(() => {
+const studentCount = useMemo(() => {
     if (!Array.isArray(users)) return 0
     return users.filter(u => {
       const roleName = u.roles?.[0]?.name?.toUpperCase() || u.role?.toUpperCase() || ''
@@ -105,15 +143,7 @@ export default function Dashboard() {
     { icon: CalendarClock, label: 'Schedule Live Class' },
   ]
 
-  const categoryDistribution = useMemo(() => {
-    const palette = ['#2563EB', '#7C3AED', '#0891B2', '#16A34A', '#D97706', '#DC2626']
-    if (!Array.isArray(categories)) return []
-    return categories.slice(0, 6).map((c, i) => ({
-      label: c.name || c.categoryTitle || 'Untitled',
-      value: c.courseCount ?? 0,
-      color: palette[i % palette.length]
-    }))
-  }, [categories])
+
 
   const recentEnrollments = useMemo(() => {
     if (!Array.isArray(users)) return []
@@ -177,8 +207,8 @@ export default function Dashboard() {
             <div className="dashboard__donut">
               <DonutChart segments={categoryDistribution} />
               <div className="dashboard__donut-legend">
-                {categoryDistribution.map((c) => (
-                  <div className="legend-row" key={c.label}>
+               {categoryDistribution.map((c) => (
+                  <div className="legend-row" key={c.id}>
                     <span className="legend-dot" style={{ background: c.color }} />
                     {c.label}
                     <strong style={{ marginLeft: 'auto' }}>{c.value}</strong>

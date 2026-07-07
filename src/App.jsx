@@ -18,6 +18,7 @@ import Grading from "./admin/pages/Grading";
 import LiveClasses from "./admin/pages/LiveClasses";
 import Banner from "./admin/pages/Banner";
 import Settings from "./admin/pages/Settings";
+import ContentDetails from "./admin/pages/ContentDetails";
 
 
 
@@ -39,6 +40,7 @@ function App() {
             <Route path="categories" element={<Categories />} />
              <Route path="users" element={<Users />} />
              <Route path="content" element = {<Content />} />
+            <Route path="content/:id" element={<ContentDetails />} />
              <Route path="payments" element = {<Payments />} />
              <Route path="grading"  element = {<Grading />} />
              <Route path="live-classes" element={<LiveClasses/>} />

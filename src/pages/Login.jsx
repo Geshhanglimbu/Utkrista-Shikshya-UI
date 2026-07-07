@@ -90,15 +90,34 @@ export default function Login() {
   password,
   browserInfo: navigator.userAgent,
 });
-
 console.log("Full Response:", res);
-console.log("Response Data:", res.data);
-console.log("Token:", res.data.token);
+console.log("res.data:", res.data);
+console.log("res.user:", res.user);
+
+// console.log("Full Response:", res);
+// console.log("Response Data:", res.data);
+// console.log("Token:", res.data.token);
   
 
     // store token (important)
-    localStorage.setItem("token", res.data.token);
+   localStorage.setItem("token", res.data.token);
 
+localStorage.setItem(
+  "user",
+  JSON.stringify(res.data.user)
+);
+
+localStorage.setItem(
+  "userId",
+  res.data.user.id.toString()
+);
+
+localStorage.setItem(
+  "roles",
+  JSON.stringify(res.data.user.roles)
+);
+console.log("Saved userId:", localStorage.getItem("userId"));
+console.log("Saved user:", JSON.parse(localStorage.getItem("user")));
     setStatus("success");
     
 //     setTimeout(() => {
