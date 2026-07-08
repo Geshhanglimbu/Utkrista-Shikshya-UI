@@ -76,11 +76,6 @@ export default function Content() {
   const [uploading, setUploading] = useState(false)
   const [deletingId, setDeletingId] = useState(null)
 
-  // NOTE: backend ma "get all content" ko euta single endpoint dekhinena —
-  // contentService.getByCategoryId(categoryId) matra cha. Tesaile pahila
-  // categories fetch garera, tesपछि each category ko content parallel ma
-  // tanera combine gareko. Yadi backend ma pachi "/posts" jasto get-all route
-  // aayo bhane, yo loop hatai euta call le nai kaam huncha.
   
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -170,8 +165,11 @@ export default function Content() {
   const handleUpload = async (e) => {
     e.preventDefault()
     const form = new FormData(e.target)
-    const title = form.get('title')
-    const categoryId = form.get('categoryId')
+    const title = form.get("title");
+    const content = form.get("content");
+    const mentor = form.get("mentor");
+    const videoLink = form.get("videoLink");
+    const categoryId = form.get("categoryId");
 
     if (!title || !categoryId) {
       toast.error('Title and category are required')
@@ -197,11 +195,14 @@ export default function Content() {
     setUploading(true)
     try {
       // Step 1: post metadata create garne
-      const res = await contentService.create(userId, categoryId, { title })
+      const res = await contentService.create(userId, categoryId, { 
+        title,
+        content,
+        mentor,
+        videoLink,})
       console.log(res.data);
-      const newId = res?.data?.id ?? res?.data?.data?.id ?? res?.data?.postId
+      const newId = res.data.postId;
 
-      // Step 2: actual file separate endpoint bata upload garne
      if (!newId) {
     toast.error("Post ID not found");
     return;
@@ -213,7 +214,10 @@ export default function Content() {
         console.log("Uploading Post:", newId);
         console.log("Selected File:", uploadFile);
 
-        await contentService.uploadFile(newId, fileForm);
+        const uploadRes = await contentService.uploadFile(newId, fileForm);
+        const postRes = await contentService.getById(newId);
+        console.log("Upload Response:", uploadRes.data);
+      
 
         console.log("Upload Success");
     
@@ -224,7 +228,11 @@ export default function Content() {
       e.target.reset()
       await loadData()
     } catch (err) {
-      toast.error(err?.response?.data?.message || 'Failed to upload content')
+      console.log("Upload Error:", err);
+      console.log("Status:", err.response?.status);
+      console.log("Response:", err.response?.data);
+
+      toast.error(err?.response?.data?.message || "Failed to upload content");
     } finally {
       setUploading(false)
     }
@@ -388,6 +396,29 @@ export default function Content() {
           <label>Title
             <input type="text" name="title" placeholder="Content title" required />
           </label>
+         
+          <label>Details
+            <input
+              name="content"
+              placeholder="Enter content"
+              rows={4}
+            />
+          </label>
+            <label>Mentor
+             <input
+                name="mentor"
+                placeholder="Mentor Name"
+                rows={2}
+              />
+            </label>
+
+            <label>Video Link
+              <input
+                type="text"
+                name="videoLink"
+                placeholder="Video Link"
+            />
+            </label>
           <label>Category
             <select name="categoryId" required defaultValue="">
               <option value="" disabled>Select category</option>

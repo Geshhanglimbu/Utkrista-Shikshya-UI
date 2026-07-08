@@ -116,11 +116,27 @@ import axios from 'axios'
 }
   
 
-  export const liveClassService = { 
-    getAll: (params, config) => api.get("/lives", { params, ...config }),
-    create: (userId, categoryId, data, config) => api.post(`/user/${userId}/category/${categoryId}/lives`, data, config),
-  }
+ export const liveClassService = {
+  // Get all live classes
+  getAll: (params, config) =>
+    api.get("/lives", { params, ...config }),
 
+  // Get all live classes by category ID
+  getByCategoryId: (categoryId, config) =>
+    api.get(`/category/${categoryId}/lives/`, config),
+
+  // Create a live class
+  create: (userId, categoryId, data, config) =>
+    api.post(`/user/${userId}/category/${categoryId}/lives`, data, config),
+
+  // Update a live class
+  update: (id, data, config) =>
+    api.put(`/lives/${id}`, data, config),
+
+  // Delete a live class
+  remove: (id, config) =>
+    api.delete(`/live/${id}`, config),
+}
   export const bannerService = {
     getAll: (config) => api.get('/banners', config),
     upload: (formData, config) => api.post('/banners', formData, config),
