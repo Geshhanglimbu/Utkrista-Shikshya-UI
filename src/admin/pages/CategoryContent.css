@@ -1,0 +1,229 @@
+/* CategoryContent.css
+   Categories.css ko design tokens (blue/white theme, #2952E3 primary) sanga
+   consistent rakhna khoji gareko cha. Agar Categories.css ma yi variables
+   already define cha bhane, duplicate variable declaration hataera
+   yo file lai plain component styles matra banauna sakincha. */
+
+:root {
+  --cc-primary: #2952e3;
+  --cc-primary-light: #eef2ff;
+  --cc-border: #e5e7eb;
+  --cc-text: #1f2937;
+  --cc-text-muted: #6b7280;
+  --cc-bg-card: #ffffff;
+  --cc-danger: #b91c1c;
+  --cc-radius: 10px;
+}
+
+/* Back button spacing tweak specific to this page */
+.categories-page .page-head .btn.btn-sm {
+  gap: 6px;
+}
+
+/* Content grid reuses .categories-grid from Categories.css, extra tweaks here */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.category-card {
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius);
+  background: var(--cc-bg-card);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.category-card:hover {
+  box-shadow: 0 6px 18px rgba(41, 82, 227, 0.08);
+  transform: translateY(-2px);
+}
+
+.category-card__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.category-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.category-card__top h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cc-text);
+}
+
+.category-card__body p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--cc-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.category-card__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--cc-text-muted);
+}
+
+.category-card__stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.category-card__stats a {
+  color: var(--cc-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.category-card__stats a:hover {
+  text-decoration: underline;
+}
+
+/* PDF attachment button */
+.category-card__body .btn.btn-outline.btn-sm {
+  align-self: flex-start;
+  gap: 6px;
+  color: var(--cc-primary);
+  border-color: var(--cc-primary);
+}
+
+.category-card__body .btn.btn-outline.btn-sm:hover {
+  background: var(--cc-primary-light);
+}
+
+/* Attached image preview */
+.category-card__body img {
+  border: 1px solid var(--cc-border);
+}
+
+/* Empty / loading / error states already use .card, just center + soften text */
+.categories-page .card[style*='text-align: center'] {
+  color: var(--cc-text-muted);
+  font-size: 14px;
+}
+
+/* Mentor / expired style reused for consistency */
+.category-card__stats em {
+  font-style: normal;
+  color: var(--cc-danger);
+  font-weight: 500;
+}
+
+/* ============================
+   RESPONSIVE BREAKPOINTS
+   ============================ */
+
+/* Tablet (≤ 1024px): thodo tight grid, spacing kam */
+@media (max-width: 1024px) {
+  .categories-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+
+  .category-card__body {
+    padding: 14px;
+  }
+}
+
+/* Small tablet / large phone (≤ 768px): page-head stack huney */
+@media (max-width: 768px) {
+  .categories-page .page-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .categories-page .page-head h1 {
+    font-size: 18px;
+  }
+
+  .categories-page .page-head p {
+    font-size: 13px;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .category-card__stats {
+    gap: 8px 12px;
+  }
+}
+
+/* Mobile (≤ 480px): single column, touch-friendly spacing */
+@media (max-width: 480px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-card {
+    border-radius: 8px;
+  }
+
+  .category-card__body {
+    padding: 12px;
+    gap: 6px;
+  }
+
+  .category-card__top {
+    flex-wrap: wrap;
+  }
+
+  .category-card__top h4 {
+    font-size: 14px;
+  }
+
+  .category-card__body p {
+    font-size: 12.5px;
+    -webkit-line-clamp: 4;
+  }
+
+  .category-card__stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .category-card__body img {
+    border-radius: 6px;
+  }
+
+  .category-card__body .btn.btn-outline.btn-sm {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .categories-page .page-head .btn.btn-sm {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Very small phones (≤ 360px) */
+@media (max-width: 360px) {
+  .categories-page {
+    padding: 0 4px;
+  }
+
+  .category-card__body {
+    padding: 10px;
+  }
+}

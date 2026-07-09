@@ -7,6 +7,7 @@ import UploadBox from '../../components/admin/UploadBox'
 import { Plus, Pencil, Trash2, LayoutGrid, List, Tag, CalendarClock, Video, FileStack } from 'lucide-react'
 import { categoryService, contentService } from '../../services/api'
 import './Categories.css'
+import { useNavigate } from 'react-router-dom'
 
 // Backend ma mainCategory yi fixed values ma aauxa (create form ma pani yही list use vayeko cha)
 const MAIN_CATEGORIES = ['CLASS_9', 'CLASS_10', 'CLASS_11', 'CLASS_12', 'MERN_STACK', 'UI_UX', 'PYTHON']
@@ -70,6 +71,8 @@ const FILE_BASE_URL = import.meta.env.VITE_FILE_BASE_URL || ''
 const thumbnailUrl = (imageName) => (imageName ? `${FILE_BASE_URL}/${imageName}` : null)
 
 export default function Categories() {
+  const navigate = useNavigate()
+
   const [search, setSearch] = useState('')
   const [mainCategoryFilter, setMainCategoryFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('') // 'Active' | 'Expired'
@@ -89,51 +92,56 @@ export default function Categories() {
   const [contentCounts, setContentCounts] = useState({}) // { [categoryId]: number }
   const [countsLoading, setCountsLoading] = useState(false)
 
-  const extractContentList = (res) => {
-  const d = res?.data
-  const list = d?.data ?? d?.content ?? d?.posts ?? d
-  return Array.isArray(list) ? list : []
-}
-  
-const fetchContentCounts = useCallback(async (categoryList) => {
-  if (categoryList.length === 0) return
-  setCountsLoading(true)
-  try {
-    const results = await Promise.allSettled(
-      categoryList.map((c) => contentService.getByCategoryId(c.id))
-    )
-    const counts = {}
-    results.forEach((res, idx) => {
-      const catId = categoryList[idx].id
-      console.log('category', catId, res) // 👈 TEMP — check shape/errors in devtools console
-      counts[catId] = res.status === 'fulfilled' ? extractContentList(res.value).length : null
+  const goToContent = (category) => {
+    navigate(`/admin/categories/${category.id}/content`, {
+      state: { categoryName: category.name }, // optional: header ma title dekhauna
     })
-    setContentCounts(counts)
-  } finally {
-    setCountsLoading(false)
   }
-}, [])
 
-const fetchCategories = useCallback(async () => {
-  setLoading(true)
-  setError(null)
-  try {
-    const res = await categoryService.getAll()
-    const list = extractList(res).map(normalizeCategory)
-    setCategories(list)
-    fetchContentCounts(list)
-  } catch (err) {
-    const message = err?.response?.data?.message || 'Failed to load categories'
-    setError(message)
-    toast.error(message)
-  } finally {
-    setLoading(false)
+  const extractContentList = (res) => {
+    const d = res?.data
+    const list = d?.data ?? d?.content ?? d?.posts ?? d
+    return Array.isArray(list) ? list : []
   }
-}, [fetchContentCounts])
 
-useEffect(() => {
-  fetchCategories()
-}, [fetchCategories])
+  const fetchContentCounts = useCallback(async (categoryList) => {
+    if (categoryList.length === 0) return
+    setCountsLoading(true)
+    try {
+      const results = await Promise.allSettled(
+        categoryList.map((c) => contentService.getByCategoryId(c.id))
+      )
+      const counts = {}
+      results.forEach((res, idx) => {
+        const catId = categoryList[idx].id
+        counts[catId] = res.status === 'fulfilled' ? extractContentList(res.value).length : null
+      })
+      setContentCounts(counts)
+    } finally {
+      setCountsLoading(false)
+    }
+  }, [])
+
+  const fetchCategories = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await categoryService.getAll()
+      const list = extractList(res).map(normalizeCategory)
+      setCategories(list)
+      fetchContentCounts(list)
+    } catch (err) {
+      const message = err?.response?.data?.message || 'Failed to load categories'
+      setError(message)
+      toast.error(message)
+    } finally {
+      setLoading(false)
+    }
+  }, [fetchContentCounts])
+
+  useEffect(() => {
+    fetchCategories()
+  }, [fetchCategories])
 
   // Note: yaha client-side filter garya cha (already fetched list mathi).
   // Dataset thulo bhaye, categoryService.searchByTitle() / searchByMain() (api.js ma existing cha)
@@ -185,31 +193,22 @@ useEffect(() => {
         toast.success('Category updated successfully')
       } else {
         // Create endpoint le pura body chahincha
-        const date = form.get('courseValidDate');
-
         const payload = {
-            categoryTitle: form.get("categoryTitle"),
-            mainCategory: form.get("mainCategory"),
-            categoryDescription: form.get("categoryDescription"),
-            courceType: form.get("courceType"),
-            courseValidDate: `${form.get("courseValidDate")}:00`,
-            categoryType: form.get("categoryType"),
-            price: isPaid ? Number(form.get("price")) : 0,
-          };
+          categoryTitle: form.get('categoryTitle'),
+          mainCategory: form.get('mainCategory'),
+          categoryDescription: form.get('categoryDescription'),
+          courceType: form.get('courceType'),
+          courseValidDate: `${form.get('courseValidDate')}:00`,
+          categoryType: form.get('categoryType'),
+          price: isPaid ? Number(form.get('price')) : 0,
+        }
 
-         console.log("Sending payload:", payload);
+        const res = await categoryService.create(payload)
 
-            const res = await categoryService.create(payload);
-
-            console.log("Create API succeeded");
-            console.log(res.data);
-
-            const newId =
-              res?.data?.categoryId ??
-              res?.data?.id ??
-              res?.data?.data?.categoryId;
-
-            console.log("New ID:", newId);
+        const newId =
+          res?.data?.categoryId ??
+          res?.data?.id ??
+          res?.data?.data?.categoryId
 
         if (thumbnailFile && newId) {
           try {
@@ -228,11 +227,9 @@ useEffect(() => {
       e.target.reset()
       fetchCategories()
     } catch (err) {
-  console.log("FULL ERROR:", err);
-  console.log("MESSAGE:", err.message);
-  console.log("RESPONSE:", err.response?.data);
-  console.log("STATUS:", err.response?.status);
-} finally {
+      const message = err?.response?.data?.message || 'Failed to save category'
+      toast.error(message)
+    } finally {
       setCreating(false)
     }
   }
@@ -325,7 +322,12 @@ useEffect(() => {
 
             <div className={view === 'grid' ? 'categories-grid' : 'categories-list'}>
               {items.map((c) => (
-                <div key={c.id} className="card category-card">
+                <div
+                  key={c.id}
+                  className="card category-card"
+                  onClick={() => goToContent(c)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <div className="category-card__thumb">
                     {thumbnailUrl(c.imageName) ? (
                       <img
@@ -354,7 +356,7 @@ useEffect(() => {
                       </span>
                     </div>
                     <p>{c.description}</p>
-                    
+
                     <div className="category-card__stats">
                       <span>
                         <Tag size={13} /> {mainCategoryLabel(c.mainCategory)}
@@ -376,13 +378,22 @@ useEffect(() => {
                       )}
                     </div>
                     <div className="category-card__actions">
-                      <button className="btn btn-outline btn-sm" onClick={() => openEdit(c)}>
+                      <button
+                        className="btn btn-outline btn-sm"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          openEdit(c)
+                        }}
+                      >
                         <Pencil size={13} /> Edit
                       </button>
                       <button
                         className="btn btn-danger btn-sm"
                         disabled={deletingId === c.id}
-                        onClick={() => setConfirmDelete(c)}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setConfirmDelete(c)
+                        }}
                       >
                         <Trash2 size={13} /> {deletingId === c.id ? 'Deleting...' : 'Delete'}
                       </button>

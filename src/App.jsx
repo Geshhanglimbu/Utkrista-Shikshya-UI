@@ -17,8 +17,8 @@ import Payments from "./admin/pages/Payments";
 import Grading from "./admin/pages/Grading";
 import LiveClasses from "./admin/pages/LiveClasses";
 import Settings from "./admin/pages/Settings";
-import ContentDetails from "./admin/pages/ContentDetails";
-
+import ContentDetails from "./admin/pages/ContentDetails"
+import CategoryContent from "./admin/pages/CategoryContent"; // Import the new component
 
 
 function App() {
@@ -37,6 +37,7 @@ function App() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="categories" element={<Categories />} />
+            <Route path="categories/:id/content" element={<CategoryContent />} />
              <Route path="users" element={<Users />} />
              <Route path="content" element = {<Content />} />
             <Route path="content/:id" element={<ContentDetails />} />

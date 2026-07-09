@@ -56,7 +56,7 @@ export default function ContentDetails() {
   const fileUrl = content.imageName
     ? contentService.getFileUrl(content.imageName)
     : "";
-
+  console.log("fileUrl:", fileUrl);
   const extension =
     content.imageName?.split(".").pop()?.toLowerCase() || "";
 
