@@ -77,16 +77,61 @@ import axios from 'axios'
     addRoleByEmail: (email, role, config) =>api.post(`/users/addRole/email/${encodeURIComponent(email)}/role/${encodeURIComponent(role)}`, null, config)
   };
 
-  export const categoryService = {
-    getAll: (config) => api.get('/categories/', config),
-    create: (data, config) => api.post('/categories/', data, config),
-    update: (id, data, config) => api.put(`/categories/${id}`, data, config),
-    uploadFile: (id, formData) => api.post(`/categories/file/upload/${id}`, formData), 
-    searchByTitle: (title, config) => api.get(`/categories/search/title/${encodeURIComponent(title)}`, config),
-    searchByMain: (mainCategory, config) =>api.get(`/categories/search/main/${encodeURIComponent(mainCategory)}`, config),
-    remove: (catId, config) => api.delete(`/categories/${catId}`, config),
-  }
+export const categoryService = {
+  // Get all categories
+  getAll: (config) => api.get('/categories/', config),
 
+  // Get category by ID
+  getById: (id, config) => api.get(`/categories/${id}`, config),
+
+  // Get latest categories
+  getLatest: (config) => api.get('/categories/latest', config),
+
+  // Create category
+  create: (data, config) => api.post('/categories/', data, config),
+
+  // Update category
+  update: (id, data, config) => api.put(`/categories/${id}`, data, config),
+
+  // Delete category
+  remove: (catId, config) => api.delete(`/categories/${catId}`, config),
+
+  // Upload category image/file
+  uploadFile: (id, formData) =>
+    api.post(`/categories/file/upload/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+
+  // Get uploaded category image/file
+  getImage: (fileName, config) =>
+    api.get(`/categories/image/${fileName}`, {
+      ...config,
+      responseType: "blob",
+    }),
+
+  // Search by category title
+  searchByTitle: (title, config) =>
+    api.get(
+      `/categories/search/title/${encodeURIComponent(title)}`,
+      config
+    ),
+
+  // Search by main category
+  searchByMain: (mainCategory, config) =>
+    api.get(
+      `/categories/search/main/${encodeURIComponent(mainCategory)}`,
+      config
+    ),
+
+  // Search by both title and main category
+  search: (keyword, config) =>
+    api.get(
+      `/categories/search/${encodeURIComponent(keyword)}`,
+      config
+    ),
+};
   export const paymentService = {
     checkPayment: (userId, categoryId, config) => api.get(`/payment/check/user/${userId}/category/${categoryId}`, config),
     approve: (id, config) => api.post(`/payment/approve/${id}`, null, config),
@@ -137,6 +182,45 @@ import axios from 'axios'
   remove: (id, config) =>
     api.delete(`/live/${id}`, config),
 }
+// ======================
+// Exam Service
+// ======================
+
+export const examService = {
+  // Create Exam
+  create: (userId, categoryId, data) =>
+    api.post(`/user/${userId}/category/${categoryId}/exams`, data),
+
+  // Get All Exams
+  getAll: () =>
+    api.get("/exams"),
+
+  // Get Exam By Category
+  getByCategory: (categoryId) =>
+    api.get(`/exams/${categoryId}`),
+
+  // Upload Exam Image/File
+  uploadFile: (examId, formData) =>
+    api.post(`/exam/file/upload/${examId}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+
+  // Get Exam Image/File
+  getFile: (fileName) =>
+    api.get(`/exam/file/${fileName}`, {
+      responseType: "blob",
+    }),
+
+  // Update Exam
+  update: (examId, data) =>
+    api.put(`/exams/${examId}`, data),
+
+  // Delete Exam (if available)
+  remove: (examId) =>
+    api.delete(`/exams/${examId}`),
+};
   export const bannerService = {
     getAll: (config) => api.get('/banners', config),
     upload: (formData, config) => api.post('/banners', formData, config),

@@ -148,7 +148,7 @@ export default function ContentDetails() {
               <div className="pdf-warning">
                 <FileText size={18} />
                 <span>
-                  Your backend currently forces PDFs to download instead of
+                  Our backend currently has PDFs to download instead of
                   displaying inside the browser.
                 </span>
               </div>

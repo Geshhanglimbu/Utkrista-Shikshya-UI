@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { ArrowLeft, Video, FileText, User, CalendarClock } from 'lucide-react'
+import { ArrowLeft, Video, FileText, User, CalendarClock, Inbox, ExternalLink } from 'lucide-react'
 import { contentService } from '../../services/api'
-import './Categories.css' // ya alag CategoryContent.css banauna sakincha
+import Modal from '../../components/admin/Modal'
+import './Categories.css'
+import './CategoryContent.css'
 
 // Java LocalDateTime array -> JS Date
 const dateArrayToDate = (arr) => {
@@ -18,10 +20,16 @@ const formatDate = (arr) => {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
-const fileUrl = (imageName) =>
-  imageName ? contentService.getFileUrl(imageName) : null;
-const isPdf = (imageName) => imageName?.toLowerCase().endsWith('.pdf')
+const fileUrl = (imageName) => (imageName ? contentService.getFileUrl(imageName) : null)
+const isPdf = (imageName) => (imageName || '').toLowerCase().endsWith('.pdf')
 const isImage = (imageName) => /\.(jpe?g|png|gif|webp)$/i.test(imageName || '')
+
+// Video links are sometimes stored without a protocol, or with one already -
+// this normalizes either form into a safe absolute URL.
+const normalizeVideoLink = (link) => {
+  if (!link) return null
+  return /^https?:\/\//i.test(link) ? link : `https://${link}`
+}
 
 const normalizePost = (p) => ({
   id: p.postId,
@@ -50,6 +58,7 @@ export default function CategoryContent() {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [selectedPost, setSelectedPost] = useState(null)
 
   const categoryName = location.state?.categoryName
 
@@ -88,96 +97,152 @@ export default function CategoryContent() {
     <div className="categories-page">
       <div className="page-head">
         <div>
-          <button
-            className="btn btn-outline btn-sm"
-            onClick={() => navigate(-1)}
-            style={{ marginBottom: 12 }}
-          >
+          <button className="btn btn-outline btn-sm back-btn" onClick={() => navigate(-1)}>
             <ArrowLeft size={14} /> Back
           </button>
-          <h1>{derivedCategoryName || `Category #${id}`} — Content</h1>
-          <p>All posts published under this category.</p>
+          <h1>{derivedCategoryName || `Category #${id}`}</h1>
+          <p>
+            {loading
+              ? 'Loading content…'
+              : `${posts.length} post${posts.length === 1 ? '' : 's'} published under this category`}
+          </p>
         </div>
       </div>
 
       {loading ? (
-        <div className="card" style={{ padding: '32px', textAlign: 'center' }}>
-          Loading content...
+        <div className="card state-panel">
+          <div className="spinner" />
+          <p>Loading content…</p>
         </div>
       ) : error ? (
-        <div className="card" style={{ padding: '32px', textAlign: 'center' }}>
-          {error}
+        <div className="card state-panel">
+          <p>{error}</p>
         </div>
       ) : posts.length === 0 ? (
-        <div className="card" style={{ padding: '32px', textAlign: 'center' }}>
-          No content found for this category.
+        <div className="card state-panel">
+          <Inbox size={26} className="state-panel__icon" />
+          <p>No content has been published under this category yet.</p>
         </div>
       ) : (
         <div className="categories-grid">
-          {posts.map((p) => (
-            <div
+          {posts.map((p) => {
+            const hasImage = isImage(p.imageName)
+            const hasPdf = isPdf(p.imageName)
+            const videoHref = normalizeVideoLink(p.videoLink)
+
+            return (
+              <div
                 key={p.id}
-                className="card category-card"
-                onClick={() => navigate(`/content/${p.id}`)}
-                style={{ cursor: "pointer" }}
-                >
-              <div className="category-card__body">
-                <div className="category-card__top">
+                className="card content-card"
+                onClick={() => setSelectedPost(p)}
+                role="button"
+                tabIndex={0}
+              >
+                {hasImage && (
+                  <div className="content-card__thumb">
+                    <img src={fileUrl(p.imageName)} alt={p.title} />
+                  </div>
+                )}
+                {hasPdf && (
+                  <div className="content-card__thumb content-card__thumb--pdf">
+                    <FileText size={26} />
+                    <span>PDF</span>
+                  </div>
+                )}
+
+                <div className="content-card__body">
                   <h4>{p.title}</h4>
-                </div>
+                  {p.content && <p>{p.content}</p>}
 
-                {p.content && <p>{p.content}</p>}
-
-                {isImage(p.imageName) && (
-                  <img
-                    src={fileUrl(p.imageName)}
-                    alt={p.title}
-                    style={{ width: '100%', borderRadius: 8, margin: '8px 0' }}
-                  />
-                )}
-                {console.log(fileUrl(p.imageName))}
-                {isPdf(p.imageName) && (
-                 <a
-                    
-                    href={fileUrl(p.imageName)}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="btn btn-outline btn-sm"
-                    style={{ margin: '8px 0', display: 'inline-flex' }}
+                  {hasPdf && (
+                    <a
+                      href={fileUrl(p.imageName)}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="btn btn-outline btn-sm content-card__attachment"
                     >
-                    <FileText size={13} /> View Attachment
-                  </a>
-                )}
+                      <FileText size={13} /> View Attachment
+                    </a>
+                  )}
 
-                <div className="category-card__stats">
-                  {p.mentor && (
+                  <div className="content-card__meta">
+                    {p.mentor && (
+                      <span>
+                        <User size={13} /> {p.mentor}
+                      </span>
+                    )}
                     <span>
-                      <User size={13} /> {p.mentor}
+                      <CalendarClock size={13} /> {p.addedDateLabel}
                     </span>
-                  )}
-                  <span>
-                    <CalendarClock size={13} /> {p.addedDateLabel}
-                  </span>
-                  {p.videoLink && (
-                    <span>
-                      <Video size={13} />{' '}
-                      <a
-                            href={`https://${p.videoLink.replace(/^https?:\/\//, '')}`}
-                            target="_blank"
-                            rel="noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            >
-                        Watch video
+                    {videoHref && (
+                      <a href={videoHref} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
+                        <Video size={13} /> Watch video
                       </a>
-                    </span>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
+
+      <Modal
+        open={!!selectedPost}
+        onClose={() => setSelectedPost(null)}
+        title={selectedPost?.title || 'Content'}
+        width="640px"
+      >
+        {selectedPost && (
+          <div className="content-preview">
+            {isImage(selectedPost.imageName) && (
+              <img
+                src={fileUrl(selectedPost.imageName)}
+                alt={selectedPost.title}
+                className="content-preview__image"
+              />
+            )}
+
+            {isPdf(selectedPost.imageName) && (
+              <embed
+                src={fileUrl(selectedPost.imageName)}
+                type="application/pdf"
+                className="content-preview__pdf"
+              />
+            )}
+
+            {(isImage(selectedPost.imageName) || isPdf(selectedPost.imageName)) && (
+              <a
+                href={fileUrl(selectedPost.imageName)}
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-outline btn-sm content-preview__open-link"
+              >
+                <ExternalLink size={13} /> Open file in new tab
+              </a>
+            )}
+
+            {selectedPost.content && <p className="content-preview__text">{selectedPost.content}</p>}
+
+            <div className="content-card__meta">
+              {selectedPost.mentor && (
+                <span>
+                  <User size={13} /> {selectedPost.mentor}
+                </span>
+              )}
+              <span>
+                <CalendarClock size={13} /> {selectedPost.addedDateLabel}
+              </span>
+              {normalizeVideoLink(selectedPost.videoLink) && (
+                <a href={normalizeVideoLink(selectedPost.videoLink)} target="_blank" rel="noreferrer">
+                  <Video size={13} /> Watch video
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   )
 }

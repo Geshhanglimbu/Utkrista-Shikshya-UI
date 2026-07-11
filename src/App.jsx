@@ -18,7 +18,8 @@ import Grading from "./admin/pages/Grading";
 import LiveClasses from "./admin/pages/LiveClasses";
 import Settings from "./admin/pages/Settings";
 import ContentDetails from "./admin/pages/ContentDetails"
-import CategoryContent from "./admin/pages/CategoryContent"; // Import the new component
+import CategoryContent from "./admin/pages/CategoryContent";
+import ExamManagement from "./admin/pages/ExamManagement";
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
              <Route path="payments" element = {<Payments />} />
              <Route path="grading"  element = {<Grading />} />
              <Route path="live-classes" element={<LiveClasses/>} />
+            <Route path="exam-management" element={<ExamManagement />} />
              <Route path="settings" element={<Settings />} />
 
             {/* later: users, payments, categories, etc. add here */}
