@@ -13,10 +13,12 @@ const navItems = [
   { to: '/admin/categories', label: 'Categories', icon: FolderKanban },
   { to: '/admin/content', label: 'Content', icon: FileStack },
   { to: '/admin/payments', label: 'Payments', icon: CreditCard },
-  { to: '/admin/grading', label: 'Grading', icon: GraduationCap },
   { to: '/admin/live-classes', label: 'Live Classes', icon: Video },
+  {to: '/admin/booking', label: 'Booking', icon: CreditCard},
   { to: '/admin/exam-management', label: 'Exam Management', icon: Image },
+  { to: '/admin/grading', label: 'Grading', icon: GraduationCap },
   { to: '/admin/settings', label: 'Settings', icon: Settings },
+
 ]
 
 export default function Sidebar() {

@@ -20,6 +20,7 @@ import Settings from "./admin/pages/Settings";
 import ContentDetails from "./admin/pages/ContentDetails"
 import CategoryContent from "./admin/pages/CategoryContent";
 import ExamManagement from "./admin/pages/ExamManagement";
+import Booking from "./admin/pages/Booking";
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
              <Route path="grading"  element = {<Grading />} />
              <Route path="live-classes" element={<LiveClasses/>} />
             <Route path="exam-management" element={<ExamManagement />} />
+            <Route path="booking" element={<Booking />} />
              <Route path="settings" element={<Settings />} />
 
             {/* later: users, payments, categories, etc. add here */}

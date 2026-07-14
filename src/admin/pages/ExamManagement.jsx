@@ -447,8 +447,15 @@ export default function ExamManagement() {
       if (selectedExamId === id) closeDetail();
       loadExams(filterCategoryId || undefined);
     } catch (err) {
-      console.error("Failed to delete exam:", err.response?.data || err.message);
-      toast.error("Failed to delete exam");
+      console.error("Delete Error:", err);
+      console.error("Response:", err?.response);
+      console.error("Data:", err?.response?.data);
+
+      toast.error(
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to delete exam"
+      );
     } finally {
       setDeleting(false);
     }

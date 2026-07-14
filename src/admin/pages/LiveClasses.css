@@ -1,7 +1,359 @@
-.live-link{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--primary);font-weight:600;}
-.schedule-form{display:flex;flex-direction:column;gap:14px;font-size:13px;font-weight:600;}
-.schedule-form input, .schedule-form select{
-  margin-top:6px;width:100%;padding:10px 12px;border-radius:var(--radius-sm);
-  border:1px solid var(--border);font-size:13px;font-weight:400;font-family:inherit;outline:none;
+/* ==========================================================================
+   Live Classes Management — Admin Dashboard
+   Design system: #2952E3 primary blue, Poppins (headings) + Inter (body)
+   ========================================================================== */
+
+.liveclasses-page {
+  --lc-primary: #2952e3;
+  --lc-primary-dark: #1e3fb8;
+  --lc-primary-light: #eef2ff;
+  --lc-primary-lighter: #f6f8ff;
+  --lc-ink: #101828;
+  --lc-muted: #667085;
+  --lc-border: #e4e8f2;
+  --lc-surface: #ffffff;
+  --lc-bg: #f7f9fd;
+  --lc-success: #12b76a;
+  --lc-success-bg: #e7f8ef;
+  --lc-warning: #f79009;
+  --lc-warning-bg: #fef3e2;
+
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 32px;
+  background: var(--lc-bg);
+  font-family: 'Inter', sans-serif;
+  color: var(--lc-ink);
 }
-.schedule-form__row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* ---------------- Page head ---------------- */
+
+.liveclasses-page .page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.liveclasses-page .page-head h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--lc-ink);
+  margin: 0 0 4px;
+}
+
+.liveclasses-page .page-head p {
+  font-size: 14px;
+  color: var(--lc-muted);
+  margin: 0;
+}
+
+.liveclasses-page .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 20px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  white-space: nowrap;
+}
+
+.liveclasses-page .btn:active {
+  transform: translateY(1px);
+}
+
+.liveclasses-page .btn-primary {
+  background: var(--lc-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(41, 82, 227, 0.28);
+}
+
+.liveclasses-page .btn-primary:hover {
+  background: var(--lc-primary-dark);
+  box-shadow: 0 4px 12px rgba(41, 82, 227, 0.35);
+}
+
+.liveclasses-page .btn-outline {
+  background: #ffffff;
+  color: var(--lc-muted);
+  border-color: var(--lc-border);
+}
+
+.liveclasses-page .btn-outline:hover {
+  background: var(--lc-bg);
+  color: var(--lc-ink);
+  border-color: #cdd5e6;
+}
+
+/* ---------------- Stats grid ---------------- */
+
+.liveclasses-page .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ---------------- Card wrapper (table container) ---------------- */
+
+.liveclasses-page .card {
+  background: var(--lc-surface);
+  border: 1px solid var(--lc-border);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  overflow-x: auto;
+}
+
+/* Table cell tweaks specific to this page */
+
+.liveclasses-page strong {
+  font-weight: 600;
+  color: var(--lc-ink);
+}
+
+.liveclasses-page a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--lc-primary);
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--lc-primary-light);
+  transition: background 0.15s ease;
+}
+
+.liveclasses-page a:hover {
+  background: #dfe6fd;
+}
+
+/* ---------------- Row actions ---------------- */
+
+.liveclasses-page .row-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.liveclasses-page .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--lc-border);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--lc-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.liveclasses-page .btn-icon:hover {
+  background: var(--lc-primary-light);
+  border-color: var(--lc-primary);
+  color: var(--lc-primary);
+}
+
+.liveclasses-page .row-actions .btn-icon:last-child:hover {
+  background: #fdecea;
+  border-color: #f04438;
+  color: #f04438;
+}
+
+/* ---------------- Schedule / Edit form (inside Modal) ---------------- */
+
+.liveclasses-page .schedule-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.liveclasses-page .schedule-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lc-ink);
+}
+
+.liveclasses-page .schedule-form input,
+.liveclasses-page .schedule-form select {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--lc-ink);
+  background: var(--lc-primary-lighter);
+  border: 1px solid var(--lc-border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.liveclasses-page .schedule-form input::placeholder {
+  color: #a3aac2;
+  font-weight: 400;
+}
+
+.liveclasses-page .schedule-form input:focus,
+.liveclasses-page .schedule-form select:focus {
+  border-color: var(--lc-primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(41, 82, 227, 0.14);
+}
+
+.liveclasses-page .schedule-form select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23667085' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 34px;
+}
+
+.liveclasses-page .schedule-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.liveclasses-page .modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid var(--lc-border);
+}
+
+/* ---------------- Status badges (optional hook for Badge component) ---------------- */
+
+.liveclasses-page .badge-upcoming {
+  background: var(--lc-primary-light);
+  color: var(--lc-primary-dark);
+}
+
+.liveclasses-page .badge-ongoing {
+  background: var(--lc-warning-bg);
+  color: var(--lc-warning);
+}
+
+.liveclasses-page .badge-completed {
+  background: var(--lc-success-bg);
+  color: var(--lc-success);
+}
+
+/* ==========================================================================
+   Responsive breakpoints
+   ========================================================================== */
+
+/* Tablets / small laptops */
+@media (max-width: 1024px) {
+  .liveclasses-page {
+    padding: 24px;
+    gap: 22px;
+  }
+
+  .liveclasses-page .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .liveclasses-page .page-head h1 {
+    font-size: 22px;
+  }
+}
+
+/* Tablets (portrait) */
+@media (max-width: 768px) {
+  .liveclasses-page {
+    padding: 18px;
+    gap: 18px;
+  }
+
+  .liveclasses-page .page-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .liveclasses-page .page-head .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .liveclasses-page .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .liveclasses-page .schedule-form__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Large phones */
+@media (max-width: 480px) {
+  .liveclasses-page {
+    padding: 14px;
+    gap: 16px;
+  }
+
+  .liveclasses-page .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .liveclasses-page .page-head h1 {
+    font-size: 19px;
+  }
+
+  .liveclasses-page .page-head p {
+    font-size: 13px;
+  }
+
+  .liveclasses-page .card {
+    border-radius: 12px;
+    padding: 4px;
+  }
+
+  .liveclasses-page .modal__footer {
+    flex-direction: column-reverse;
+  }
+
+  .liveclasses-page .modal__footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+  .liveclasses-page {
+    padding: 10px;
+  }
+
+  .liveclasses-page .page-head h1 {
+    font-size: 17px;
+  }
+
+  .liveclasses-page .btn {
+    font-size: 13px;
+    padding: 10px 14px;
+  }
+
+  .liveclasses-page .schedule-form input,
+  .liveclasses-page .schedule-form select {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+}

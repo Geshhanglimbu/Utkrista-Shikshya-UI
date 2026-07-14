@@ -221,6 +221,28 @@ export const examService = {
   remove: (examId) =>
     api.delete(`/exams/${examId}`),
 };
+
+// ======================
+// Booking Service
+// ======================
+
+export const bookingService = {
+  // Create Booking
+  create: (userId, categoryId, data, config) =>
+    api.post(`/user/${userId}/category/${categoryId}/bookeds`, data, config),
+
+  // Get All Bookings
+  getAll: (params, config) =>
+    api.get("/bookeds", { params, ...config }),
+
+  // Get Bookings By User ID
+  getByUserId: (userId, config) =>
+    api.get(`/booked/user/${userId}`, config),
+
+  // Check Booking Status
+  checkBooked: (userId, categoryId, config) =>
+    api.get(`/check/user/${userId}/category/${categoryId}`, config),
+};
   export const bannerService = {
     getAll: (config) => api.get('/banners', config),
     upload: (formData, config) => api.post('/banners', formData, config),
