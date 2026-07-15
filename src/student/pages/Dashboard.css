@@ -1,0 +1,571 @@
+
+
+.student-dashboard {
+  /* ---- Core palette ---- */
+  --sd-primary: #2952e3;
+  --sd-primary-dark: #1e3fc4;
+  --sd-primary-light: #eaf0ff;
+  --sd-ink-900: #0b0f24;
+  --sd-ink-700: #10162f;
+  --sd-ink-500: #545b71;
+  --sd-ink-400: #6b7280;
+  --sd-border: #e7eaf3;
+  --sd-border-soft: #eef1f8;
+  --sd-surface: #ffffff;
+  --sd-bg: #f5f7fc;
+  --sd-success: #16a34a;
+  --sd-success-light: #e6f7ec;
+  --sd-warn: #d97706;
+  --sd-danger: #e11d48;
+
+  /* ---- Elevation (layered, low-opacity shadows read as "premium") ---- */
+  --sd-radius-xl: 22px;
+  --sd-radius-lg: 18px;
+  --sd-radius: 14px;
+  --sd-radius-sm: 10px;
+  --sd-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.04);
+  --sd-shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.05), 0 6px 16px rgba(16, 24, 40, 0.04);
+  --sd-shadow-md: 0 4px 10px rgba(16, 24, 40, 0.04), 0 16px 36px rgba(16, 24, 40, 0.08);
+  --sd-shadow-hero: 0 20px 40px rgba(30, 63, 196, 0.22), 0 6px 16px rgba(30, 63, 196, 0.12);
+  --sd-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 30px 34px 56px;
+  background:
+    radial-gradient(1100px 480px at 82% -8%, rgba(41, 82, 227, 0.07), transparent 60%),
+    radial-gradient(900px 420px at -10% 30%, rgba(41, 82, 227, 0.05), transparent 55%),
+    var(--sd-bg);
+  color: var(--sd-ink-700);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+}
+
+.student-dashboard * {
+  box-sizing: border-box;
+}
+
+.student-dashboard h3,
+.student-dashboard h4,
+.student-dashboard h5 {
+  font-family: "Poppins", "Inter", sans-serif;
+  margin: 0;
+  color: var(--sd-ink-900);
+  letter-spacing: -0.01em;
+}
+
+.student-dashboard button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.student-dashboard button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* ---------- Hero row: big welcome showcase ---------- */
+
+.student-dashboard__hero-row {
+  position: relative;
+  isolation: isolate;
+  min-height: 268px;
+  border-radius: var(--sd-radius-xl);
+  padding: 8px;
+  background: linear-gradient(122deg, #3459e8 0%, var(--sd-primary) 32%, var(--sd-primary-dark) 68%, #172977 100%);
+  box-shadow: var(--sd-shadow-hero);
+  overflow: hidden;
+}
+
+.student-dashboard__hero-row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 85% -15%, rgba(255, 255, 255, 0.28), transparent 52%),
+    radial-gradient(circle at 100% 100%, rgba(124, 140, 248, 0.35), transparent 45%),
+    radial-gradient(circle at 4% 115%, rgba(255, 255, 255, 0.12), transparent 45%);
+  pointer-events: none;
+}
+
+.student-dashboard__hero-row::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.5;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse 70% 100% at 100% 0%, black, transparent 70%);
+  pointer-events: none;
+}
+
+.student-dashboard__hero-row > * {
+  position: relative;
+  z-index: 1;
+  min-height: 252px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ---------- Stats column (kept for layouts that still render it) ---------- */
+
+.student-dashboard__stats-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- Two-column row: continue learning + upcoming exams ---------- */
+
+.student-dashboard__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+/* ---------- Generic panel ---------- */
+
+.student-dashboard__panel {
+  position: relative;
+  background: var(--sd-surface);
+  border: 1px solid var(--sd-border);
+  border-radius: var(--sd-radius-lg);
+  box-shadow: var(--sd-shadow-sm);
+  padding: 24px 26px;
+  transition: box-shadow 0.25s var(--sd-ease), transform 0.25s var(--sd-ease), border-color 0.25s var(--sd-ease);
+}
+
+.student-dashboard__panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 26px;
+  right: 26px;
+  height: 2px;
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(90deg, var(--sd-primary), var(--sd-accent, #7c8cf8));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.student-dashboard__panel:hover {
+  box-shadow: var(--sd-shadow-md);
+  border-color: #dde3f5;
+  transform: translateY(-2px);
+}
+
+.student-dashboard__panel:hover::before {
+  opacity: 1;
+}
+
+.student-dashboard__panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--sd-border-soft);
+}
+
+.student-dashboard__panel-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 16.5px;
+  font-weight: 640;
+}
+
+.student-dashboard__panel-header h3 svg {
+  color: var(--sd-primary);
+  flex-shrink: 0;
+}
+
+.student-dashboard__subtext {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  color: var(--sd-ink-400);
+}
+
+.student-dashboard__link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  padding: 6px 10px;
+  margin: -6px -10px 0 0;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--sd-primary);
+  transition: background 0.15s ease, gap 0.15s ease;
+}
+
+.student-dashboard__link-btn:hover {
+  background: var(--sd-primary-light);
+  gap: 7px;
+}
+
+/* ---------- Upcoming exams list ---------- */
+
+.student-dashboard__exam-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exam-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px;
+  border: 1px solid var(--sd-border);
+  border-radius: var(--sd-radius);
+  background: var(--sd-surface);
+  cursor: pointer;
+  transition: border-color 0.2s var(--sd-ease), background 0.2s var(--sd-ease), transform 0.2s var(--sd-ease),
+    box-shadow 0.2s var(--sd-ease);
+}
+
+.exam-row:hover,
+.exam-row:focus-visible {
+  border-color: #c7d4fb;
+  background: var(--sd-primary-light);
+  transform: translateX(3px);
+  box-shadow: var(--sd-shadow-xs);
+  outline: none;
+}
+
+.exam-row__date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  background: linear-gradient(155deg, var(--sd-primary-light), #dfe7ff);
+  color: var(--sd-primary-dark);
+}
+
+.exam-row__date span {
+  font-size: 18px;
+  font-weight: 750;
+  line-height: 1.1;
+}
+
+.exam-row__date small {
+  font-size: 10px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.exam-row__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.exam-row__tag {
+  display: inline-flex;
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sd-primary);
+  background: var(--sd-primary-light);
+  padding: 2px 9px;
+  border-radius: 999px;
+  margin-bottom: 3px;
+}
+
+.exam-row__info h5 {
+  font-size: 14px;
+  font-weight: 620;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exam-row__info p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--sd-ink-400);
+}
+
+.student-dashboard__view-calendar {
+  margin-top: 4px;
+  padding: 11px;
+  border: 1.5px dashed #d5dcf3;
+  border-radius: var(--sd-radius);
+  background: transparent;
+  color: var(--sd-primary);
+  font-size: 13px;
+  font-weight: 650;
+  text-align: center;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.student-dashboard__view-calendar:hover {
+  background: var(--sd-primary-light);
+  border-color: var(--sd-primary);
+}
+
+/* ---------- Upcoming live classes ---------- */
+
+.student-dashboard__live-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.live-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 13px 15px 13px 18px;
+  border: 1px solid var(--sd-border);
+  border-radius: var(--sd-radius);
+  background: var(--sd-surface);
+  overflow: hidden;
+  transition: box-shadow 0.2s var(--sd-ease), transform 0.2s var(--sd-ease);
+}
+
+.live-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--sd-success);
+}
+
+.live-row:hover {
+  box-shadow: var(--sd-shadow-sm);
+  transform: translateX(3px);
+}
+
+.live-row__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.live-row__info h5 {
+  font-size: 14px;
+  font-weight: 620;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.live-row__info p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--sd-ink-400);
+}
+
+.live-row__join {
+  flex-shrink: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 20px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #22b358, var(--sd-success));
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 18px rgba(22, 163, 74, 0.32);
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.live-row__join::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+  animation: sd-live-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes sd-live-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.live-row__join:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(22, 163, 74, 0.4);
+}
+
+/* ---------- Cap lists to 2 visible rows ---------- */
+/* Pure-CSS cap so only the first two exam rows / live rows show, without
+   touching the JS slice(0, 4) / slice(0, 3) logic. The "View Full Calendar"
+   button isn't a .exam-row, so it's unaffected and still shows. */
+
+.exam-row:nth-child(n + 3) {
+  display: none;
+}
+
+.live-row:nth-child(n + 3) {
+  display: none;
+}
+
+/* ---------- Recommended courses carousel ---------- */
+
+.student-dashboard__carousel-controls {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.student-dashboard__carousel-controls button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--sd-border);
+  background: var(--sd-surface);
+  color: var(--sd-ink-700);
+  box-shadow: var(--sd-shadow-xs);
+  transition: all 0.2s ease;
+}
+
+.student-dashboard__carousel-controls button:hover:not(:disabled) {
+  background: var(--sd-primary);
+  border-color: var(--sd-primary);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(41, 82, 227, 0.3);
+}
+
+.student-dashboard__carousel-controls button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.student-dashboard__recommended-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* =====================================================
+   Responsive breakpoints
+   ===================================================== */
+
+@media (max-width: 1200px) {
+  .student-dashboard__recommended-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .student-dashboard {
+    padding: 24px;
+  }
+
+  .student-dashboard__hero-row {
+    min-height: 230px;
+  }
+
+  .student-dashboard__hero-row > * {
+    min-height: 214px;
+  }
+
+  .student-dashboard__stats-col {
+    flex-direction: row;
+  }
+
+  .student-dashboard__stats-col > * {
+    flex: 1;
+  }
+}
+
+@media (max-width: 860px) {
+  .student-dashboard__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .student-dashboard {
+    padding: 16px;
+    gap: 18px;
+  }
+
+  .student-dashboard__hero-row {
+    min-height: 210px;
+    border-radius: var(--sd-radius-lg);
+  }
+
+  .student-dashboard__hero-row > * {
+    min-height: 194px;
+  }
+
+  .student-dashboard__stats-col {
+    flex-direction: column;
+  }
+
+  .student-dashboard__panel {
+    padding: 18px;
+  }
+
+  .student-dashboard__recommended-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .live-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .live-row__join {
+    align-self: stretch;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-dashboard__recommended-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .exam-row {
+    align-items: flex-start;
+  }
+
+  .student-dashboard__panel-header {
+    flex-direction: column;
+    gap: 6px;
+  }
+}

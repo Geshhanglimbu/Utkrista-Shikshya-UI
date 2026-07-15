@@ -1,0 +1,36 @@
+/* student/components/SearchBar.css */
+
+.student-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--sp-surface);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius-sm);
+  padding: 10px 16px;
+  transition: var(--sp-transition);
+}
+
+.student-search-bar:focus-within {
+  border-color: var(--sp-primary);
+  box-shadow: 0 0 0 3px var(--sp-primary-light);
+}
+
+.student-search-bar__icon {
+  color: var(--sp-text-muted);
+  flex-shrink: 0;
+}
+
+.student-search-bar input {
+  border: none;
+  outline: none;
+  background: none;
+  width: 100%;
+  font-size: 14px;
+  font-family: var(--sp-font-body);
+  color: var(--sp-text-primary);
+}
+
+.student-search-bar input::placeholder {
+  color: var(--sp-text-muted);
+}

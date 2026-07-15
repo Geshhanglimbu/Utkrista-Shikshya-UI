@@ -1,0 +1,107 @@
+/* student/components/StateViews.css */
+
+.state-view {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--sp-surface);
+  border-radius: var(--sp-radius-md);
+  border: 1px dashed var(--sp-border);
+}
+
+.state-view__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.state-view__icon--empty {
+  background: var(--sp-primary-light);
+  color: var(--sp-primary);
+}
+
+.state-view__icon--error {
+  background: #fdecec;
+  color: var(--sp-danger);
+}
+
+.state-view h4 {
+  font-family: var(--sp-font-heading);
+  font-size: 16px;
+  margin: 0 0 6px;
+  color: var(--sp-text-primary);
+}
+
+.state-view p {
+  font-size: 13px;
+  color: var(--sp-text-secondary);
+  max-width: 320px;
+  margin: 0;
+}
+
+.state-view__retry {
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--sp-primary);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--sp-radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--sp-transition);
+}
+
+.state-view__retry:hover {
+  background: var(--sp-primary-dark);
+}
+
+/* Skeleton card (course-card shaped) */
+.skeleton-card {
+  background: var(--sp-surface);
+  border-radius: var(--sp-radius-md);
+  overflow: hidden;
+  border: 1px solid var(--sp-border);
+}
+
+.skeleton-card__image {
+  height: 150px;
+  width: 100%;
+}
+
+.skeleton-card__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-card__line {
+  height: 12px;
+  border-radius: 6px;
+}
+
+.sp-shimmer {
+  background: linear-gradient(90deg, #eef1f8 25%, #f7f8fc 37%, #eef1f8 63%);
+  background-size: 400% 100%;
+  animation: sp-shimmer 1.4s ease infinite;
+}
+
+@keyframes sp-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}

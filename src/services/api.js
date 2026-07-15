@@ -144,9 +144,7 @@ export const categoryService = {
     getByCategoryId: (categoryId, config) => api.get(`/category/${categoryId}`, config),
     update: (id, data, config) => api.put(`/posts/${id}`, data, config),
     getByCategoryTitle: (title, config) => api.get(`/categories/search/title/${encodeURIComponent(title)}`, config),
-    // ADDED: yi duita missing thiye — Content.jsx le call gardai thiyo tara api.js ma exist nai gareko thiyena.
-    // Naming pattern categoryService jasto nai rakheko (posts/file/upload/:id). Backend ma actual route
-    // farak vaye yaha path matra change garnu paro.
+  
     remove: (id, config) => api.delete(`/posts/${id}`, config),
     uploadFile: (id, formData) =>api.post(`/post/file/upload/${id}`, formData, {
     headers: {
@@ -243,10 +241,5 @@ export const bookingService = {
   checkBooked: (userId, categoryId, config) =>
     api.get(`/check/user/${userId}/category/${categoryId}`, config),
 };
-  export const bannerService = {
-    getAll: (config) => api.get('/banners', config),
-    upload: (formData, config) => api.post('/banners', formData, config),
-    remove: (id, config) => api.delete(`/banners/${id}`, config),
-  }
-
+ 
   export default api

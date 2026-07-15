@@ -94,42 +94,47 @@ console.log("Full Response:", res);
 console.log("res.data:", res.data);
 console.log("res.user:", res.user);
 
-// console.log("Full Response:", res);
-// console.log("Response Data:", res.data);
-// console.log("Token:", res.data.token);
-  
+// Save login information
+localStorage.setItem("token", res.data.token);
+localStorage.setItem("user", JSON.stringify(res.data.user));
+localStorage.setItem("userId", res.data.user.id.toString());
+localStorage.setItem("roles", JSON.stringify(res.data.user.roles));
 
-    // store token (important)
-   localStorage.setItem("token", res.data.token);
+console.log("User:", res.data.user);
+console.log("Roles:", res.data.user.roles);
 
-localStorage.setItem(
-  "user",
-  JSON.stringify(res.data.user)
-);
+// Show success screen
+setStatus("success");
 
-localStorage.setItem(
-  "userId",
-  res.data.user.id.toString()
-);
+// Get role
+const roles = res.data.user.roles || [];
 
-localStorage.setItem(
-  "roles",
-  JSON.stringify(res.data.user.roles)
-);
-console.log("Saved userId:", localStorage.getItem("userId"));
-console.log("Saved user:", JSON.parse(localStorage.getItem("user")));
-    setStatus("success");
-    
-//     setTimeout(() => {
-//   if (role === "ADMIN") {
-//     navigate("/admin/dashboard");
-//   } else {
-//     navigate("/student/dashboard");
-//   }
-// }, 1500);
-    setTimeout(() => {
+const role =
+  roles[0]?.roleName ||
+  roles[0]?.name ||
+  roles[0];
+console.log(role);
+// Redirect based on role
+setTimeout(() => {
+  switch (role) {
+    case "ROLE_ADMIN":
       navigate("/admin/dashboard");
-    }, 1500);
+      break;
+    case "ROLE_NORMAL":
+    console.log("Navigating to student dashboard...");
+
+      navigate("/student/dashboard");
+      break;
+
+    case "ROLE_TEACHER":
+      navigate("/teacher/dashboard");
+      break;
+
+    default:
+      toast.error("Unknown user role.");
+      navigate("/");
+  }
+}, 1500);
 
   } catch (error) {
     setStatus("idle");

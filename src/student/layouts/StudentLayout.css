@@ -1,0 +1,113 @@
+/* student/layouts/StudentLayout.css */
+
+/* ==========================================================
+   Design tokens — shared across the entire Student Panel.
+   Matches the existing Utkrista Shikshya design system
+   (primary blue #2952E3, Poppins/Inter, rounded soft-shadow cards).
+   ========================================================== */
+:root {
+  --sp-primary: #2952e3;
+  --sp-primary-dark: #1e3fb8;
+  --sp-primary-light: #eaefff;
+  --sp-gradient: linear-gradient(135deg, #2952e3 0%, #5b7cf5 100%);
+
+  --sp-bg: #f5f7fb;
+  --sp-surface: #ffffff;
+  --sp-border: #e6e9f2;
+
+  --sp-text-primary: #12172b;
+  --sp-text-secondary: #6b7288;
+  --sp-text-muted: #9aa1b5;
+
+  --sp-success: #16a34a;
+  --sp-success-bg: #e8f8ee;
+  --sp-warning: #d97706;
+  --sp-danger: #dc2626;
+
+  --sp-radius-sm: 10px;
+  --sp-radius-md: 16px;
+  --sp-radius-lg: 22px;
+
+  --sp-shadow-sm: 0 2px 8px rgba(18, 23, 43, 0.05);
+  --sp-shadow-md: 0 8px 24px rgba(41, 82, 227, 0.08);
+  --sp-shadow-lg: 0 16px 40px rgba(41, 82, 227, 0.12);
+
+  --sp-font-heading: "Poppins", sans-serif;
+  --sp-font-body: "Inter", sans-serif;
+
+  --sp-sidebar-width: 260px;
+  --sp-sidebar-width-collapsed: 84px;
+  --sp-navbar-height: 76px;
+
+  --sp-transition: all 0.2s ease;
+}
+
+.student-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--sp-bg);
+  font-family: var(--sp-font-body);
+  color: var(--sp-text-primary);
+}
+
+.student-shell__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--sp-sidebar-width);
+  transition: margin-left 0.25s ease;
+  min-width: 0;
+}
+
+.student-shell__main--collapsed {
+  margin-left: var(--sp-sidebar-width-collapsed);
+}
+
+.student-shell__content {
+  padding: 28px 32px 48px;
+  flex: 1;
+}
+
+.student-shell__overlay {
+  display: none;
+}
+
+/* ==========================================================
+   Responsive breakpoints: 1024px / 768px / 480px / 360px
+   ========================================================== */
+@media (max-width: 1024px) {
+  .student-shell__content {
+    padding: 24px 20px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .student-shell__main,
+  .student-shell__main--collapsed {
+    margin-left: 0;
+  }
+
+  .student-shell__overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 23, 43, 0.45);
+    z-index: 40;
+  }
+
+  .student-shell__content {
+    padding: 20px 16px 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-shell__content {
+    padding: 16px 12px 32px;
+  }
+}
+
+@media (max-width: 360px) {
+  .student-shell__content {
+    padding: 14px 10px 28px;
+  }
+}

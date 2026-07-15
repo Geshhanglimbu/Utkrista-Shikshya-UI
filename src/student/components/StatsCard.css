@@ -1,0 +1,108 @@
+/* student/components/StatsCard.css */
+
+.stats-card {
+  background: var(--sp-surface);
+  border-radius: var(--sp-radius-md);
+  border: 1px solid var(--sp-border);
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--sp-shadow-sm);
+  transition: var(--sp-transition);
+}
+
+.stats-card:hover {
+  box-shadow: var(--sp-shadow-md);
+  transform: translateY(-2px);
+}
+
+.stats-card__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--sp-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stats-card__icon--primary {
+  background: var(--sp-primary-light);
+  color: var(--sp-primary);
+}
+
+.stats-card__icon--success {
+  background: var(--sp-success-bg);
+  color: var(--sp-success);
+}
+
+.stats-card__icon--warning {
+  background: #fef3e2;
+  color: var(--sp-warning);
+}
+
+.stats-card__label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--sp-text-muted);
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.stats-card__value {
+  font-family: var(--sp-font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--sp-text-primary);
+  margin: 0;
+}
+
+/* Skeleton state */
+.skeleton-block {
+  background: linear-gradient(90deg, #eef1f8 25%, #f7f8fc 37%, #eef1f8 63%);
+  background-size: 400% 100%;
+  animation: sp-shimmer 1.4s ease infinite;
+}
+
+.skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #eef1f8 25%, #f7f8fc 37%, #eef1f8 63%);
+  background-size: 400% 100%;
+  animation: sp-shimmer 1.4s ease infinite;
+  margin-bottom: 8px;
+}
+
+.skeleton-line--label {
+  width: 60%;
+}
+
+.skeleton-line--value {
+  width: 40%;
+  height: 18px;
+}
+
+@keyframes sp-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-card {
+    padding: 16px;
+    gap: 12px;
+  }
+  .stats-card__icon {
+    width: 44px;
+    height: 44px;
+  }
+  .stats-card__value {
+    font-size: 20px;
+  }
+}
