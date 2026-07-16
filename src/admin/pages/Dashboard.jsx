@@ -183,7 +183,7 @@ const studentCount = useMemo(() => {
       <div className="page-head">
         <div>
           <h1>Overview Dashboard</h1>
-          <p>Welcome back, Admin! Here's what's happening at Utkrista Shikshya today.</p>
+          <p>Welcome back, Admin! Here's what's happening at   today.</p>
         </div>
         <div className="dashboard__quick-actions">
           {quickActions.map(({ icon: Icon, label }) => (

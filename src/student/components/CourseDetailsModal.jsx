@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { X, BookOpen, FileText, Radio, CheckCircle2 } from "lucide-react";
 import { formatPrice, getCourseBadge, formatDate } from "../utils/helpers";
 import "./CourseDetailsModal.css";
+import useRemoteImage from "../hooks/useRemoteImage";
 
 /**
  * CourseDetailsModal
@@ -21,6 +22,7 @@ const CourseDetailsModal = ({
   isEnrolled,
   onClose,
   onEnroll,
+  categoryService,
   contentService,
   examService,
   liveClassService,
@@ -37,6 +39,8 @@ const CourseDetailsModal = ({
     const loadDetails = async () => {
       setIsLoading(true);
       try {
+        console.log("Selected Course:", course);
+        console.log("Category ID:", course.categoryId);
         const [contentRes, examRes, liveRes] = await Promise.allSettled([
           contentService?.getByCategoryId(course.categoryId ?? course.id),
           examService?.getByCategory(course.categoryId ?? course.id),
@@ -45,11 +49,28 @@ const CourseDetailsModal = ({
 
         if (!isMounted) return;
 
+        console.log("Content Response:", contentRes.value?.data);
+
+        const lessonData =
+          contentRes.status === "fulfilled" ? contentRes.value?.data : null;
+
         setLessons(
-          contentRes.status === "fulfilled" ? contentRes.value?.data ?? [] : []
+          Array.isArray(lessonData)
+            ? lessonData
+            : lessonData
+            ? [lessonData]
+            : []
         );
+        console.log("Lessons:", contentRes.value?.data);
+        const examData =
+        examRes.status === "fulfilled" ? examRes.value?.data : null;
+
         setExams(
-          examRes.status === "fulfilled" ? examRes.value?.data ?? [] : []
+          Array.isArray(examData)
+            ? examData
+            : examData
+            ? [examData]
+            : []
         );
         setLiveClasses(
           liveRes.status === "fulfilled"
@@ -72,6 +93,10 @@ const CourseDetailsModal = ({
   if (!course) return null;
 
   const badge = getCourseBadge(course.categoryType, course.price);
+  const { url: imageUrl } = useRemoteImage(
+  course.image,
+  categoryService.getImage
+);
 
   return (
     <div className="course-modal__overlay" onClick={onClose}>
@@ -80,11 +105,17 @@ const CourseDetailsModal = ({
           <X size={20} />
         </button>
 
+        {imageUrl ? (
         <img
-          src={course.image}
+          src={imageUrl}
           alt={course.title}
           className="course-modal__image"
         />
+      ) : (
+        <div className="course-modal__image-placeholder">
+          No Image
+        </div>
+      )}
 
         <div className="course-modal__body">
           <div className="course-modal__meta-row">
@@ -112,18 +143,27 @@ const CourseDetailsModal = ({
 
           <div className="course-modal__section">
             <h4>
-              <BookOpen size={16} /> Lessons ({isLoading ? "…" : lessons.length})
-            </h4>
+          <BookOpen size={16} />
+          Course Contents ({isLoading ? "…" : lessons.length})
+        </h4>
             {!isLoading && lessons.length === 0 && (
               <p className="course-modal__empty">No lessons published yet.</p>
             )}
-            <ul className="course-modal__list">
-              {lessons.slice(0, 5).map((lesson) => (
-                <li key={lesson.id ?? lesson.contentId}>
-                  <CheckCircle2 size={14} /> {lesson.title ?? lesson.name}
-                </li>
-              ))}
-            </ul>
+          <ul className="course-modal__list">
+            {lessons.slice(0, 5).map((content) => (
+              <li key={content.postId ?? content.id}>
+                <div>
+                  <strong>{content.title}</strong>
+                </div>
+
+                <div>{content.description}</div>
+
+                <div>
+                  {content.postType}
+                </div>
+              </li>
+            ))}
+          </ul>
           </div>
 
           <div className="course-modal__section">

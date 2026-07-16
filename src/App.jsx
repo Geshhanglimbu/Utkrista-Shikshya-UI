@@ -32,6 +32,7 @@ import Booking from "./admin/pages/Booking";
 // ====================
 import StudentLayout from "./student/layouts/StudentLayout";
 import StudentDashboard from "./student/pages/Dashboard";
+import BrowseCourses from "./student/pages/BrowseCourses";
 
 // ====================
 // Teacher
@@ -82,6 +83,7 @@ function App() {
           >
             <Route path="/student" element={<StudentLayout />}>
               <Route path="dashboard" element={<StudentDashboard />} />
+              <Route path="browse-courses" element={<BrowseCourses />} />
             </Route>
           </Route>
 
