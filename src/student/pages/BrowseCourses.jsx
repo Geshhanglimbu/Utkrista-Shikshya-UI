@@ -1,9 +1,9 @@
 // student/pages/BrowseCourses.jsx
 import { useEffect, useMemo, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import FilterSidebar from "../components/FilterSidebar";
 import CourseCard from "../components/CourseCard";
-import CourseDetailsModal from "../components/CourseDetailsModal";
 import { EmptyState, ErrorState, SkeletonCard } from "../components/StateViews";
 import {
   categoryService,
@@ -12,7 +12,6 @@ import {
   liveClassService,
 } from "../../services/api"; // adjust path to match your actual services/api.js location
 import "./BrowseCourses.css";
-import useRemoteImage from "../hooks/useRemoteImage";
 
 const PAGE_SIZE = 6;
 
@@ -35,8 +34,11 @@ const SORT_OPTIONS = [
  * Course catalogue page: search + filter sidebar + sortable, paginated
  * course grid. Categories come from categoryService.getAll(); lesson
  * counts come from contentService.getByCategoryId() per category.
+ * Clicking "View Details" on a card navigates to the CourseDetails page.
  */
 const BrowseCourses = () => {
+  const navigate = useNavigate();
+
   const [categories, setCategories] = useState([]);
   const [contentByCategory, setContentByCategory] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +48,6 @@ const BrowseCourses = () => {
   const [appliedFilters, setAppliedFilters] = useState(DEFAULT_FILTERS);
   const [sortBy, setSortBy] = useState("relevant");
   const [page, setPage] = useState(1);
-  const [selectedCourse, setSelectedCourse] = useState(null);
 
   const loadCourses = useCallback(async () => {
     setIsLoading(true);
@@ -58,18 +59,18 @@ const BrowseCourses = () => {
 
       const contentResults = await Promise.allSettled(
         categoryList.map((cat) =>
-            contentService.getByCategoryId(cat.categoryId)
+          contentService.getByCategoryId(cat.categoryId)
         )
-        );
+      );
 
-        const contentMap = {};
+      const contentMap = {};
 
-        categoryList.forEach((cat, idx) => {
+      categoryList.forEach((cat, idx) => {
         contentMap[cat.categoryId] =
-            contentResults[idx].status === "fulfilled"
+          contentResults[idx].status === "fulfilled"
             ? contentResults[idx].value?.data ?? []
             : [];
-        });
+      });
       setContentByCategory(contentMap);
     } catch (err) {
       setError(err);
@@ -88,7 +89,7 @@ const BrowseCourses = () => {
       categories.map((cat) => ({
         id: cat.categoryId,
         name: cat.categoryTitle,
-        })),
+      })),
     [categories]
   );
 
@@ -106,15 +107,17 @@ const BrowseCourses = () => {
         description: cat.categoryDescription,
         lessonCount: (contentByCategory[cat.categoryId] || []).length,
         createdAt: cat.addedDate,
-        })),
+      })),
     [categories, contentByCategory]
   );
-const maxCoursePrice = useMemo(() => {
-  return Math.max(
-    ...categories.map((c) => Number(c.price || 0)),
-    0
-  );
-}, [categories]);
+
+  const maxCoursePrice = useMemo(() => {
+    return Math.max(
+      ...categories.map((c) => Number(c.price || 0)),
+      0
+    );
+  }, [categories]);
+
   // Filtering + sorting — recomputed only when its inputs actually change.
   const filteredCourses = useMemo(() => {
     let result = allCourses.filter((course) => {
@@ -174,6 +177,10 @@ const maxCoursePrice = useMemo(() => {
     setPage(1);
   };
 
+  const handleViewDetails = (course) => {
+    navigate(`/student/course/${course.categoryId}`);
+  };
+
   if (error) {
     return (
       <ErrorState
@@ -182,10 +189,7 @@ const maxCoursePrice = useMemo(() => {
       />
     );
   }
-console.log("Categories:", categories);
-console.log("All Courses:", allCourses);
-console.log("Filtered Courses:", filteredCourses);
-console.log("Paginated Courses:", paginatedCourses);
+
   return (
     <div className="browse-courses">
       <div className="browse-courses__topbar">
@@ -211,13 +215,13 @@ console.log("Paginated Courses:", paginatedCourses);
 
       <div className="browse-courses__layout">
         <FilterSidebar
-            categories={filterCategories}
-            filters={filters}
-            maxPrice={maxCoursePrice}
-            onChange={handleFilterChange}
-            onApply={handleApplyFilters}
-            onReset={handleResetFilters}
-            />
+          categories={filterCategories}
+          filters={filters}
+          maxPrice={maxCoursePrice}
+          onChange={handleFilterChange}
+          onApply={handleApplyFilters}
+          onReset={handleResetFilters}
+        />
 
         <div className="browse-courses__content">
           <div className="browse-courses__grid">
@@ -234,7 +238,7 @@ console.log("Paginated Courses:", paginatedCourses);
                   key={course.id}
                   course={course}
                   imageFetcher={categoryService.getImage}
-                  onViewDetails={setSelectedCourse}
+                  onViewDetails={handleViewDetails}
                 />
               ))
             )}
@@ -274,19 +278,6 @@ console.log("Paginated Courses:", paginatedCourses);
           )}
         </div>
       </div>
-
-      {selectedCourse && (
-        <CourseDetailsModal
-          course={selectedCourse}
-          isEnrolled={false}
-          onClose={() => setSelectedCourse(null)}
-          onEnroll={() => setSelectedCourse(null)}
-          categoryService={categoryService}
-          contentService={contentService}
-          examService={examService}
-          liveClassService={liveClassService}
-        />
-      )}
     </div>
   );
 };
