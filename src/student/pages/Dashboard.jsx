@@ -30,6 +30,8 @@ function getCategoryId(cat) {
 }
 
 // Backend sends Java LocalDateTime as an array: [yyyy, MM, dd, HH, mm, ss(, nano)]
+// It can also send a plain LocalDate as [yyyy, MM, dd] (no time part), or as an
+// ISO string like "2026-07-31". All three shapes are handled here.
 function normalizeDateValue(value) {
   if (!value) return null;
   if (Array.isArray(value)) {
@@ -41,11 +43,11 @@ function normalizeDateValue(value) {
 }
 
 /**
- * Live classes have no date at all in this API — only a bare "HH:mm"
- * time-of-day string in `startingTime` (e.g. "21:45"). There's no
- * calendar date, so this is treated as "today at that time." Malformed
- * values (like "220:22" from bad form input — 220 isn't a valid hour)
- * are rejected rather than producing an invalid Date.
+ * Parses a bare "HH:mm" time-of-day string, e.g. "21:45".
+ * Malformed values (like "220:22" from bad form input — 220 isn't a
+ * valid hour) are rejected rather than producing an invalid Date.
+ * Returns { hour, minute } or null — NOT a Date, since the caller is
+ * responsible for deciding which day this time applies to.
  */
 function parseTimeOfDay(value) {
   if (!value || typeof value !== "string") return null;
@@ -55,9 +57,54 @@ function parseTimeOfDay(value) {
   const minute = Number(match[2]);
   if (Number.isNaN(hour) || Number.isNaN(minute)) return null;
   if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
-  const d = new Date();
-  d.setHours(hour, minute, 0, 0);
-  return d;
+  return { hour, minute };
+}
+
+/**
+ * Live classes now carry a real calendar date (added on the admin
+ * create/edit form) alongside the "HH:mm" `startingTime`. Combine them
+ * into a single Date so "upcoming" reflects the actual scheduled day,
+ * not just "later today."
+ *
+ * TEMPORARY WORKAROUND: the backend does not currently persist any
+ * date field at all (confirmed against the live `/lives` response —
+ * it only returns startingTime, no date/liveDate/scheduledDate). Until
+ * that's fixed, a class with a time-of-day earlier than right-now is
+ * rolled forward to tomorrow, rather than treated as permanently in
+ * the past. This is a guess, not a real schedule: it assumes each
+ * class recurs daily at that time, which is very likely wrong once
+ * the backend actually stores a date. Remove the "roll to tomorrow"
+ * block below as soon as `date`/`liveDate` starts coming back from
+ * the API — at that point `datePart` will be set and this branch
+ * won't run at all.
+ */
+function resolveLiveClassDateTime(live) {
+  const time = parseTimeOfDay(live.startingTime);
+  const datePart = normalizeDateValue(live.date ?? live.liveDate ?? live.scheduledDate);
+
+  if (datePart && time) {
+    const combined = new Date(datePart);
+    combined.setHours(time.hour, time.minute, 0, 0);
+    return combined;
+  }
+
+  if (datePart) return datePart;
+
+  if (time) {
+    const candidate = new Date();
+    candidate.setHours(time.hour, time.minute, 0, 0);
+
+    // No real date on this record — if that time-of-day already
+    // passed today, assume the next occurrence is tomorrow instead
+    // of quietly dropping the class from "Upcoming" forever.
+    if (candidate.getTime() <= Date.now()) {
+      candidate.setDate(candidate.getDate() + 1);
+    }
+
+    return candidate;
+  }
+
+  return null;
 }
 
 // Real field is `streamlink`. Kept the others as fallbacks in case
@@ -148,11 +195,11 @@ const Dashboard = () => {
       try {
         const liveRes = await liveClassService.getAll();
         liveList = extractList(liveRes).map((live) => {
-          const dateObj = parseTimeOfDay(live.startingTime) ?? normalizeDateValue(live.date ?? live.liveDate);
+          const dateObj = resolveLiveClassDateTime(live);
           if (!dateObj && process.env.NODE_ENV !== "production") {
             // eslint-disable-next-line no-console
             console.warn(
-              `Live class "${live.title}" has an unparseable time ("${live.startingTime}") — check the create-form validation for startingTime.`,
+              `Live class "${live.title}" has no usable date/time (date="${live.date}", startingTime="${live.startingTime}") — check the create-form validation.`,
               live
             );
           }
@@ -198,9 +245,8 @@ const Dashboard = () => {
       .slice(0, 4);
   }, [exams]);
 
-  // Live classes have no date, only a daily time-of-day, so "upcoming"
-  // means "hasn't happened yet today." If everything for today has
-  // already passed, the list will legitimately be empty until tomorrow.
+  // "Upcoming" now reflects the real scheduled date + time, combined in
+  // resolveLiveClassDateTime above — not just "later today."
   const upcomingLiveClasses = useMemo(() => {
     const now = Date.now();
     return [...liveClasses]

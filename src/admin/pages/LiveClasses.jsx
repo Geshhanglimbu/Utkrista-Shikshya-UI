@@ -8,6 +8,21 @@ import Modal from '../../components/admin/Modal'
 import { liveClassService, categoryService } from '../../services/api'
 import './LiveClasses.css'
 
+// The logged-in user's id is stored directly as "userId" by Login.jsx:
+//   localStorage.setItem("userId", res.data.user.id.toString())
+// (There's also a "user" key with the full user object, kept as a fallback.)
+const getLoggedInUserId = () => {
+  const directId = localStorage.getItem("userId")
+  if (directId) return directId
+
+  try {
+    const stored = JSON.parse(localStorage.getItem("user") || "null")
+    return stored?.id ?? stored?.userId ?? null
+  } catch {
+    return null
+  }
+}
+
 export default function LiveClasses() {
 const [showSchedule, setShowSchedule] = useState(false)
 const [liveClasses, setLiveClasses] = useState([])
@@ -15,9 +30,6 @@ const [categories, setCategories] = useState([])
 const [loading, setLoading] = useState(false)
 const [title, setTitle] = useState("")
 const [selectedCategory, setSelectedCategory] = useState("")
-const [date, setDate] = useState("")
-const [time, setTime] = useState("")
-const [link, setLink] = useState("")
 const [startingTime, setStartingTime] = useState("")
 const [streamlink, setStreamlink] = useState("")
 const [editingId, setEditingId] = useState(null)
@@ -32,9 +44,6 @@ const fetchLiveClasses = async () => {
 
   try {
     const res = await liveClassService.getAll()
-
-    console.log(res.data)
-
     setLiveClasses(res.data)
   } catch (err) {
     console.error(err)
@@ -43,31 +52,21 @@ const fetchLiveClasses = async () => {
     setLoading(false)
   }
 }
+
 const fetchCategories = async () => {
   try {
     const res = await categoryService.getAll()
-      console.log(res.data)
-
     setCategories(res.data)
   } catch (err) {
     console.error(err)
   }
 }
 
-const upcoming = liveClasses.filter(
-  c => c.status === "UPCOMING"
-).length
+const upcoming = liveClasses.filter(c => c.status === "UPCOMING").length
+const ongoing = liveClasses.filter(c => c.status === "ONGOING").length
+const completed = liveClasses.filter(c => c.status === "COMPLETED").length
 
-const ongoing = liveClasses.filter(
-  c => c.status === "ONGOING"
-).length
-
-const completed = liveClasses.filter(
-  c => c.status === "COMPLETED"
-).length
-  
-
-  const columns = [
+const columns = [
   {
     key: "title",
     header: "Title",
@@ -105,79 +104,86 @@ const completed = liveClasses.filter(
     header: "Actions",
     render: (c) => (
       <div className="row-actions">
-              <button
-          className="btn-icon"
-          title="Edit"
-          onClick={() => handleEdit(c)}
-        >
+        <button className="btn-icon" title="Edit" onClick={() => handleEdit(c)}>
           <Pencil size={15} />
         </button>
-
-        <button
-          className="btn-icon"
-          onClick={() => handleDelete(c.liveId)}
-        >
+        <button className="btn-icon" onClick={() => handleDelete(c.liveId)}>
           <Trash2 size={15} />
         </button>
       </div>
     ),
   },
 ]
+
 const handleEdit = (live) => {
   setEditingId(live.liveId)
-
   setTitle(live.title)
   setStartingTime(live.startingTime)
   setStreamlink(live.streamlink)
-  setSelectedCategory(live.category.categoryId)
-
+  setSelectedCategory(live.category?.categoryId ?? "")
   setShowSchedule(true)
 }
- const handleCreate = async () => {
+
+const resetForm = () => {
+  setEditingId(null)
+  setTitle("")
+  setStartingTime("")
+  setStreamlink("")
+  setSelectedCategory("")
+}
+
+const handleCreate = async () => {
+  // Basic guardrails so we fail fast in the UI with a clear message
+  // instead of sending a request that 500s.
+  if (!title.trim()) {
+    toast.error("Please enter a class title.")
+    return
+  }
+  if (!startingTime) {
+    toast.error("Please pick a starting time.")
+    return
+  }
+  if (!streamlink.trim()) {
+    toast.error("Please enter a meeting link.")
+    return
+  }
+
+  const data = { title, startingTime, streamlink }
+
   try {
-    const userId = localStorage.getItem("userId")
-
-    const data = {
-      title,
-      startingTime,
-      streamlink,
-    }
-
     if (editingId) {
       await liveClassService.update(editingId, data)
       toast.success("Live class updated")
     } else {
-      await liveClassService.create(
-        userId,
-        selectedCategory,
-        data
-      )
+      if (!selectedCategory) {
+        toast.error("Please select a category.")
+        return
+      }
+
+      const userId = getLoggedInUserId()
+      if (!userId) {
+        toast.error("Couldn't determine the logged-in user — please log in again.")
+        return
+      }
+
+      await liveClassService.create(userId, selectedCategory, data)
       toast.success("Live class created")
     }
 
     fetchLiveClasses()
-
     setShowSchedule(false)
-
-    // Reset form
-    setEditingId(null)
-    setTitle("")
-    setStartingTime("")
-    setStreamlink("")
-    setSelectedCategory("")
-    setDate("")
-
+    resetForm()
   } catch (err) {
     console.error(err)
-    toast.error("Failed to create/update live class")
+    const serverMessage = err.response?.data?.message || err.response?.data?.error
+    toast.error(serverMessage || "Failed to create/update live class")
   }
 }
-  const handleDelete = async (id) => {
+
+const handleDelete = async (id) => {
   try {
     await liveClassService.remove(id)
-
     toast.success("Live class deleted")
-
     fetchLiveClasses()
   } catch (err) {
     toast.error("Delete failed")
@@ -191,78 +197,63 @@ const handleEdit = (live) => {
           <h1>Live Classes Management</h1>
           <p>Oversee real-time education and live schedules.</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setShowSchedule(true)}><CalendarPlus size={15} /> Schedule Live Class</button>
+        <button className="btn btn-primary" onClick={() => setShowSchedule(true)}>
+          <CalendarPlus size={15} /> Schedule Live Class
+        </button>
       </div>
 
       <div className="stats-grid">
-          <DashboardCard
-              icon={CalendarIcon}
-              label="Upcoming"
-              value={upcoming}
-          />
-
-          <DashboardCard
-              icon={Clock}
-              label="Ongoing Now"
-              value={ongoing}
-          />
-
-          <DashboardCard
-              icon={CheckCircle2}
-              label="Completed"
-              value={completed}
-          />
+        <DashboardCard icon={CalendarIcon} label="Upcoming" value={upcoming} />
+        <DashboardCard icon={Clock} label="Ongoing Now" value={ongoing} />
+        <DashboardCard icon={CheckCircle2} label="Completed" value={completed} />
       </div>
 
       <div className="card">
-        <Table
-          columns={columns}
-          rows={liveClasses}
-      />
+        <Table columns={columns} rows={liveClasses} />
       </div>
 
-      <Modal open={showSchedule} onClose={() => setShowSchedule(false)} title={editingId ? "Edit Live Class" : "Schedule Live Class"} width="500px">
+      <Modal
+        open={showSchedule}
+        onClose={() => { setShowSchedule(false); resetForm() }}
+        title={editingId ? "Edit Live Class" : "Schedule Live Class"}
+        width="500px"
+      >
         <div className="schedule-form">
-          <label>Class Title<input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Quantum Mechanics Foundations" /></label>
-         <label>
+          <label>
+            Class Title
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g. Quantum Mechanics Foundations"
+            />
+          </label>
+
+          <label>
             Category
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
+              disabled={!!editingId}
             >
               <option value="">Select Category</option>
-
               {categories.map((c) => (
-                <option
-                  key={c.categoryId}
-                  value={c.categoryId}
-                >
+                <option key={c.categoryId} value={c.categoryId}>
                   {c.categoryTitle}
                 </option>
               ))}
             </select>
           </label>
-          <div className="schedule-form__row">
+
           <label>
-              Date
-              <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </label>
-            <label>
-              Time
-              <input
-                type="time"
-                value={startingTime}
-                onChange={(e) => setStartingTime(e.target.value)}
-              />
-            </label>
-          </div>
+            Time
+            <input
+              type="time"
+              value={startingTime}
+              onChange={(e) => setStartingTime(e.target.value)}
+            />
+          </label>
+
           <label>
             Meeting Link
             <input
@@ -270,17 +261,16 @@ const handleEdit = (live) => {
               placeholder="https://meet.google.com/..."
               value={streamlink}
               onChange={(e) => setStreamlink(e.target.value)}
-                placeholder="https://..."
-                />
+            />
           </label>
+
           <div className="modal__footer" style={{ padding: '20px 0 0' }}>
-            <button className="btn btn-outline" onClick={() => setShowSchedule(false)}>Cancel</button>
-           <button
-            className="btn btn-primary"
-            onClick={handleCreate}
-          >
-            {editingId ? "Update" : "Schedule"}
-          </button>
+            <button className="btn btn-outline" onClick={() => { setShowSchedule(false); resetForm() }}>
+              Cancel
+            </button>
+            <button className="btn btn-primary" onClick={handleCreate}>
+              {editingId ? "Update" : "Schedule"}
+            </button>
           </div>
         </div>
       </Modal>
