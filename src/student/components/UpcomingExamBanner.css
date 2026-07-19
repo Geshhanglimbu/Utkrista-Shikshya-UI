@@ -1,0 +1,57 @@
+/* student/components/UpcomingExamBanner.css */
+.upcoming-exam-banner {
+  background: linear-gradient(135deg, var(--se-primary, #2952e3), #4169e8);
+  border-radius: var(--se-radius, 16px);
+  padding: 28px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+  height: 100%;
+}
+
+.upcoming-exam-banner__eyebrow {
+  font-size: 13px;
+  opacity: 0.85;
+  margin: 0 0 8px;
+}
+
+.upcoming-exam-banner__title {
+  font-family: "Poppins", sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.upcoming-exam-banner__meta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.upcoming-exam-banner__meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.upcoming-exam-banner__icon {
+  opacity: 0.25;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .upcoming-exam-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .upcoming-exam-banner__icon {
+    display: none;
+  }
+}

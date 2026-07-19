@@ -34,6 +34,7 @@ import StudentLayout from "./student/layouts/StudentLayout";
 import StudentDashboard from "./student/pages/Dashboard";
 import BrowseCourses from "./student/pages/BrowseCourses";
 import CourseDetails from "./student/pages/CourseDetails";
+import StudentExams from "./student/pages/StudentExams";
 // ====================
 // Teacher
 // ====================
@@ -85,6 +86,7 @@ function App() {
               <Route path="dashboard" element={<StudentDashboard />} />
               <Route path="browse-courses" element={<BrowseCourses />} />
               <Route path="course/:categoryId" element={<CourseDetails />} />
+              <Route path="exams" element={<StudentExams />} />
             </Route>
           </Route>
 

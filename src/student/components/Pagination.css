@@ -1,0 +1,51 @@
+/* student/components/Pagination.css */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pagination__summary {
+  font-size: 13px;
+  color: var(--se-text-muted, #6b7280);
+  margin: 0;
+}
+
+.pagination__controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pagination__arrow,
+.pagination__page {
+  min-width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--se-border, #e5e9f2);
+  background: #fff;
+  color: var(--se-text, #14161a);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: background 0.15s ease;
+}
+
+.pagination__arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination__page--active {
+  background: var(--se-primary, #2952e3);
+  border-color: var(--se-primary, #2952e3);
+  color: #fff;
+}
+
+.pagination__page:hover:not(.pagination__page--active) {
+  background: #f1f4fb;
+}

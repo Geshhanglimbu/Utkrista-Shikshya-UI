@@ -1,0 +1,161 @@
+/* student/components/ExamCard.css */
+.exam-card {
+  background: var(--se-surface, #ffffff);
+  border-radius: var(--se-radius, 16px);
+  box-shadow: var(--se-shadow, 0 4px 14px rgba(20, 30, 70, 0.06));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.exam-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(20, 30, 70, 0.12);
+}
+
+.exam-card__image {
+  position: relative;
+  height: 140px;
+  background: linear-gradient(135deg, #eef2ff, #dbe4ff);
+}
+
+.exam-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.exam-card__image-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--se-primary, #2952e3);
+  opacity: 0.5;
+}
+
+.exam-card__category-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--se-primary, #2952e3);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.exam-card__status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #fff;
+}
+
+.exam-card__status--upcoming {
+  background: var(--se-primary, #2952e3);
+}
+
+.exam-card__status--completed {
+  background: #6b7280;
+}
+
+.exam-card__status--published {
+  background: var(--se-success, #16a34a);
+}
+
+.exam-card__body {
+  padding: 16px 16px 8px;
+  flex: 1;
+}
+
+.exam-card__title {
+  font-family: "Poppins", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  color: var(--se-text, #14161a);
+}
+
+.exam-card__description {
+  font-size: 13px;
+  color: var(--se-text-muted, #6b7280);
+  margin: 0 0 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.exam-card__meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+
+.exam-card__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--se-text-muted, #6b7280);
+}
+
+.exam-card__meta-item svg {
+  flex-shrink: 0;
+  color: var(--se-primary, #2952e3);
+}
+
+.exam-card__actions {
+  padding: 12px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exam-card__start-btn,
+.exam-card__download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s ease;
+}
+
+.exam-card__start-btn {
+  background: var(--se-primary, #2952e3);
+  color: #fff;
+}
+
+.exam-card__start-btn:hover {
+  background: var(--se-primary-dark, #1e3fb8);
+}
+
+.exam-card__download-btn {
+  background: #eef1f8;
+  color: var(--se-text, #14161a);
+}
+
+.exam-card__download-btn:hover {
+  background: #e2e6f2;
+}
+/* ExamCard.css addition */
+.exam-card__status--flexible {
+  background: #eef2ff;
+  color: #4338ca;
+}

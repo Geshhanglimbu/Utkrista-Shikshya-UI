@@ -13,17 +13,10 @@ import {
   contentService,
   examService,
   liveClassService,
-} from "../../services/api"; // adjust path to match your actual services/api.js location
+} from "../../services/api";
 import { formatTime, getDateChip } from "../utils/helpers";
 import "./Dashboard.css";
 
-// ---------- Response-shape helpers ----------
-// Different endpoints on this backend wrap their list payload differently
-// (raw array vs { data: [...] } vs { content: [...] } etc). Extracting it
-// defensively here is what was silently breaking categories/exams/live
-// classes before — a wrapped response was being treated as if it were
-// already the array, so `.map()` either threw (caught by the outer
-// try/catch → ErrorState) or produced an empty dashboard.
 function extractList(res) {
   const body = res?.data;
   if (Array.isArray(body)) return body;
@@ -37,7 +30,6 @@ function getCategoryId(cat) {
 }
 
 // Backend sends Java LocalDateTime as an array: [yyyy, MM, dd, HH, mm, ss(, nano)]
-// (month is 1-indexed). Plain ISO strings/timestamps are also handled.
 function normalizeDateValue(value) {
   if (!value) return null;
   if (Array.isArray(value)) {
@@ -48,11 +40,31 @@ function normalizeDateValue(value) {
   return isNaN(parsed.getTime()) ? null : parsed;
 }
 
-// The live class's actual join URL can come back under a few different
-// field names depending on how it was created (Zoom link, YouTube link,
-// generic meeting link, etc) — check them all before giving up.
+/**
+ * Live classes have no date at all in this API — only a bare "HH:mm"
+ * time-of-day string in `startingTime` (e.g. "21:45"). There's no
+ * calendar date, so this is treated as "today at that time." Malformed
+ * values (like "220:22" from bad form input — 220 isn't a valid hour)
+ * are rejected rather than producing an invalid Date.
+ */
+function parseTimeOfDay(value) {
+  if (!value || typeof value !== "string") return null;
+  const match = value.trim().match(/^(\d{1,3}):(\d{1,2})$/);
+  if (!match) return null;
+  const hour = Number(match[1]);
+  const minute = Number(match[2]);
+  if (Number.isNaN(hour) || Number.isNaN(minute)) return null;
+  if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
+  const d = new Date();
+  d.setHours(hour, minute, 0, 0);
+  return d;
+}
+
+// Real field is `streamlink`. Kept the others as fallbacks in case
+// other live-class records use different names.
 function getLiveClassLink(lc) {
   return (
+    lc.streamlink ??
     lc.link ??
     lc.liveLink ??
     lc.meetingLink ??
@@ -70,8 +82,8 @@ const Dashboard = () => {
 
   const [categories, setCategories] = useState([]);
   const [contentByCategory, setContentByCategory] = useState({});
-  const [exams, setExams] = useState([]); // each exam gets `categoryId` + `categoryName` + `dateObj` attached
-  const [liveClasses, setLiveClasses] = useState([]); // each gets `categoryId` + `categoryName` + `dateObj`
+  const [exams, setExams] = useState([]);
+  const [liveClasses, setLiveClasses] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -96,7 +108,7 @@ const Dashboard = () => {
 
       const categoryIds = categoryList.map(getCategoryId).filter((id) => id != null);
 
-      // ---- Content (per category, so one failure doesn't block the rest) ----
+      // ---- Content ----
       const contentResults = await Promise.allSettled(
         categoryIds.map((id) => contentService.getByCategoryId(id))
       );
@@ -115,7 +127,10 @@ const Dashboard = () => {
       try {
         const examRes = await examService.getAll();
         examList = extractList(examRes).map((exam) => {
-          const dateObj = normalizeDateValue(exam.startTime ?? exam.examDate);
+          // startTime = real EXAM schedule, deadline = real ASSIGNMENT
+          // schedule (see StudentExams.jsx notes) — same fallback order
+          // used there, kept consistent here.
+          const dateObj = normalizeDateValue(exam.startTime ?? exam.deadline ?? exam.examDate);
           return {
             ...exam,
             categoryId: exam.category?.categoryId ?? exam.categoryId ?? null,
@@ -133,11 +148,20 @@ const Dashboard = () => {
       try {
         const liveRes = await liveClassService.getAll();
         liveList = extractList(liveRes).map((live) => {
-          const dateObj = normalizeDateValue(live.startTime ?? live.date ?? live.liveDate);
+          const dateObj = parseTimeOfDay(live.startingTime) ?? normalizeDateValue(live.date ?? live.liveDate);
+          if (!dateObj && process.env.NODE_ENV !== "production") {
+            // eslint-disable-next-line no-console
+            console.warn(
+              `Live class "${live.title}" has an unparseable time ("${live.startingTime}") — check the create-form validation for startingTime.`,
+              live
+            );
+          }
           return {
             ...live,
             categoryId: live.category?.categoryId ?? live.categoryId ?? null,
             categoryName: live.category?.categoryTitle || live.category?.mainCategory || "General",
+            teacherName: live.teacherName ?? live.user?.name ?? null,
+            joinLink: getLiveClassLink(live),
             dateObj,
           };
         });
@@ -157,32 +181,33 @@ const Dashboard = () => {
     loadDashboard();
   }, [loadDashboard]);
 
-  // ---- Derived data (useMemo so unrelated re-renders don't recompute these) ----
-
   const totalLessons = useMemo(
     () => Object.values(contentByCategory).reduce((sum, arr) => sum + arr.length, 0),
     [contentByCategory]
   );
 
-  const purchasedCoursesCount = categories.length; // Swap for a real enrollment API once available.
+  const purchasedCoursesCount = categories.length;
 
-  const upcomingExams = useMemo(
-    () =>
-      [...exams]
-        .filter((e) => e.dateObj) // drop exams we couldn't parse a date for
-        .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime())
-        .slice(0, 4),
-    [exams]
-  );
+  // Now actually filters for dates in the future — this was missing
+  // entirely before, which is why a Oct 2024 exam showed as "upcoming."
+  const upcomingExams = useMemo(() => {
+    const now = Date.now();
+    return [...exams]
+      .filter((e) => e.dateObj && e.dateObj.getTime() > now)
+      .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime())
+      .slice(0, 4);
+  }, [exams]);
 
-  const upcomingLiveClasses = useMemo(
-    () =>
-      [...liveClasses]
-        .filter((lc) => lc.dateObj)
-        .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime())
-        .slice(0, 3),
-    [liveClasses]
-  );
+  // Live classes have no date, only a daily time-of-day, so "upcoming"
+  // means "hasn't happened yet today." If everything for today has
+  // already passed, the list will legitimately be empty until tomorrow.
+  const upcomingLiveClasses = useMemo(() => {
+    const now = Date.now();
+    return [...liveClasses]
+      .filter((lc) => lc.dateObj && lc.dateObj.getTime() > now)
+      .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime())
+      .slice(0, 3);
+  }, [liveClasses]);
 
   const continueLearning = useMemo(() => {
     const firstCategoryWithContent = categories.find(
@@ -223,15 +248,12 @@ const Dashboard = () => {
     });
   };
 
-  // ---- Navigation handlers ----
   const goToMyCourses = () => navigate("/student/my-courses");
   const goToExams = (categoryId) =>
     navigate(categoryId ? `/student/exams?categoryId=${categoryId}` : "/student/exams");
 
-  // Joining a live class takes the student straight to the class's own link
-  // (Zoom/YouTube/meeting URL) instead of an internal route.
   const goToLiveClass = (liveClass) => {
-    const link = getLiveClassLink(liveClass);
+    const link = liveClass.joinLink || getLiveClassLink(liveClass);
     if (!link) {
       toast.error("Live class link isn't available yet.");
       return;
@@ -258,7 +280,6 @@ const Dashboard = () => {
 
   return (
     <div className="student-dashboard">
-      {/* Hero */}
       <div className="student-dashboard__hero-row">
         <DashboardCard
           isLoading={isLoading}
@@ -274,7 +295,6 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* Continue learning + upcoming exams */}
       <div className="student-dashboard__row">
         <div className="student-dashboard__panel">
           <div className="student-dashboard__panel-header">
@@ -342,7 +362,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Upcoming live classes */}
       <div className="student-dashboard__panel">
         <div className="student-dashboard__panel-header">
           <h3>
@@ -374,7 +393,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Recommended courses carousel */}
       <div className="student-dashboard__panel">
         <div className="student-dashboard__panel-header">
           <div>
