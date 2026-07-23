@@ -25,6 +25,7 @@ import {
   CheckSquare,
   Infinity as InfinityIcon,
   Check,
+  Lock,
 } from "lucide-react";
 
 import { EmptyState, ErrorState } from "../components/StateViews";
@@ -37,6 +38,7 @@ import {
   normalizeId,
 } from "../utils/helpers";
 import useAuthImage from "../utils/useAuthImage";
+import useEnrollmentStatus from "../utils/useEnrollmentStatus";
 
 import {
   categoryService,
@@ -193,20 +195,22 @@ const getLessonMeta = (lesson) => {
   return { icon: <File size={20} />, label: "Document", tone: "doc" };
 };
 
-const LessonRow = ({ lesson, index, isOpen, onToggle }) => {
+const LessonRow = ({ lesson, index, isOpen, onToggle, isEnrolled }) => {
   const meta = getLessonMeta(lesson);
   const uploadDate = lesson.uploadDate || lesson.addedDate;
   const fileUrl = lesson.videoLink || lesson.fileUrl || lesson.imageName;
 
   return (
     <motion.div
-      className="lesson-card"
+      className={`lesson-card ${!isEnrolled ? "lesson-card--locked" : ""}`}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04, duration: 0.3 }}
     >
       <button className="lesson-card__header" onClick={onToggle}>
-        <span className={`lesson-card__icon lesson-card__icon--${meta.tone}`}>{meta.icon}</span>
+        <span className={`lesson-card__icon lesson-card__icon--${meta.tone}`}>
+          {isEnrolled ? meta.icon : <Lock size={18} />}
+        </span>
 
         <div className="lesson-card__info">
           <p className="lesson-card__title">
@@ -242,14 +246,20 @@ const LessonRow = ({ lesson, index, isOpen, onToggle }) => {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
           >
-            <div className="lesson-card__actions">
-              <a className="lesson-card__btn lesson-card__btn--view" href={fileUrl || "#"} target="_blank" rel="noreferrer">
-                <Eye size={15} /> View
-              </a>
-              <a className="lesson-card__btn lesson-card__btn--download" href={fileUrl || "#"} download>
-                <Download size={15} /> Download
-              </a>
-            </div>
+            {isEnrolled ? (
+              <div className="lesson-card__actions">
+                <a className="lesson-card__btn lesson-card__btn--view" href={fileUrl || "#"} target="_blank" rel="noreferrer">
+                  <Eye size={15} /> View
+                </a>
+                <a className="lesson-card__btn lesson-card__btn--download" href={fileUrl || "#"} download>
+                  <Download size={15} /> Download
+                </a>
+              </div>
+            ) : (
+              <p className="lesson-card__locked-note">
+                <Lock size={13} /> Enroll in this course to view this lesson.
+              </p>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -257,7 +267,7 @@ const LessonRow = ({ lesson, index, isOpen, onToggle }) => {
   );
 };
 
-const CurriculumTab = ({ contents = [] }) => {
+const CurriculumTab = ({ contents = [], isEnrolled }) => {
   const [openId, setOpenId] = useState(null);
 
   if (!contents.length) {
@@ -280,6 +290,7 @@ const CurriculumTab = ({ contents = [] }) => {
             index={index}
             isOpen={openId === id}
             onToggle={() => setOpenId((prev) => (prev === id ? null : id))}
+            isEnrolled={isEnrolled}
           />
         );
       })}
@@ -297,7 +308,7 @@ const isLive = (value) => {
   return diff < 30 * 60 * 1000 && diff > -2 * 60 * 60 * 1000; // 30 min before → 2 hrs after
 };
 
-const LiveClassesTab = ({ liveClasses = [] }) => {
+const LiveClassesTab = ({ liveClasses = [], isEnrolled }) => {
   if (!liveClasses.length) {
     return (
       <EmptyState
@@ -317,13 +328,13 @@ const LiveClassesTab = ({ liveClasses = [] }) => {
         return (
           <motion.div
             key={live.liveClassId ?? live.id ?? index}
-            className="live-card"
+            className={`live-card ${!isEnrolled ? "live-card--locked" : ""}`}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05, duration: 0.3 }}
           >
             <div className="live-card__icon">
-              <Radio size={20} />
+              {isEnrolled ? <Radio size={20} /> : <Lock size={20} />}
             </div>
 
             <div className="live-card__info">
@@ -334,17 +345,23 @@ const LiveClassesTab = ({ liveClasses = [] }) => {
               </p>
             </div>
 
-            {active && <span className="live-card__badge">LIVE NOW</span>}
+            {isEnrolled && active && <span className="live-card__badge">LIVE NOW</span>}
 
-            <a
-              className="live-card__join"
-              href={streamLink || "#"}
-              target="_blank"
-              rel="noreferrer"
-              aria-disabled={!streamLink}
-            >
-              Join Live <ExternalLink size={14} />
-            </a>
+            {isEnrolled ? (
+              <a
+                className="live-card__join"
+                href={streamLink || "#"}
+                target="_blank"
+                rel="noreferrer"
+                aria-disabled={!streamLink}
+              >
+                Join Live <ExternalLink size={14} />
+              </a>
+            ) : (
+              <span className="live-card__join live-card__join--locked">
+                <Lock size={13} /> Enroll to Unlock
+              </span>
+            )}
           </motion.div>
         );
       })}
@@ -355,7 +372,7 @@ const LiveClassesTab = ({ liveClasses = [] }) => {
 /* ============================================================
  * Exams tab
  * ============================================================ */
-const ExamsTab = ({ exams = [], categoryId, navigate }) => {
+const ExamsTab = ({ exams = [], categoryId, navigate, isEnrolled }) => {
   if (!exams.length) {
     return (
       <EmptyState title="No exams available." message="There are no exams for this course yet." />
@@ -369,13 +386,13 @@ const ExamsTab = ({ exams = [], categoryId, navigate }) => {
         return (
           <motion.div
             key={examId ?? index}
-            className="exam-card"
+            className={`exam-card ${!isEnrolled ? "exam-card--locked" : ""}`}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05, duration: 0.3 }}
           >
             <div className="exam-card__icon">
-              <FileText size={20} />
+              {isEnrolled ? <FileText size={20} /> : <Lock size={20} />}
             </div>
 
             <div className="exam-card__info">
@@ -391,18 +408,54 @@ const ExamsTab = ({ exams = [], categoryId, navigate }) => {
               </div>
             </div>
 
-            <button
-              className="exam-card__start"
-              onClick={() => navigate(`/student/exam/${examId}?categoryId=${categoryId}`)}
-            >
-              Start Exam <ArrowRight size={15} />
-            </button>
+            {isEnrolled ? (
+              <button
+                className="exam-card__start"
+                onClick={() => navigate(`/student/exam/${examId}?categoryId=${categoryId}`)}
+              >
+                Start Exam <ArrowRight size={15} />
+              </button>
+            ) : (
+              <button
+                className="exam-card__start exam-card__start--locked"
+                onClick={() => navigate(`/student/payment/${categoryId}`)}
+              >
+                <Lock size={14} /> Enroll to Unlock
+              </button>
+            )}
           </motion.div>
         );
       })}
     </div>
   );
 };
+
+/* ============================================================
+ * Enrollment banner — shown above the tabs while the student
+ * can browse titles but hasn't unlocked actual content yet.
+ * ============================================================ */
+const EnrollmentBanner = ({ onEnroll }) => (
+  <motion.div
+    className="enrollment-banner"
+    initial={{ opacity: 0, y: -8 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+  >
+    <span className="enrollment-banner__icon">
+      <Lock size={18} />
+    </span>
+    <div className="enrollment-banner__text">
+      <p className="enrollment-banner__title">This course is locked</p>
+      <p className="enrollment-banner__subtitle">
+        You can browse lesson, exam, and live class titles below — enroll to unlock the actual
+        content.
+      </p>
+    </div>
+    <button className="enrollment-banner__cta" onClick={onEnroll}>
+      Enroll Now
+    </button>
+  </motion.div>
+);
 
 /* ============================================================
  * Sidebar
@@ -415,7 +468,10 @@ const INCLUDES = [
   { icon: <InfinityIcon size={16} />, label: "Lifetime Access" },
 ];
 
-const CourseSidebar = ({ category, stats, onBack }) => {
+// NOTE: onEnroll is now passed down so the sidebar's "Enroll Now"
+// button navigates to the same /student/payment/:categoryId route
+// as the hero button, instead of doing nothing.
+const CourseSidebar = ({ category, stats, onBack, onEnroll }) => {
   const { price, categoryType, mainCategory, validUntil, validityDate, expiryDate } = category ?? {};
   const validDate = validUntil ?? validityDate ?? expiryDate;
 
@@ -460,7 +516,9 @@ const CourseSidebar = ({ category, stats, onBack }) => {
           ))}
         </ul>
 
-        <button className="course-sidebar__enroll">Enroll Now</button>
+        <button className="course-sidebar__enroll" onClick={onEnroll}>
+          Enroll Now
+        </button>
       </div>
 
       <button className="course-sidebar__back" onClick={onBack}>
@@ -497,6 +555,11 @@ const CourseDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
+
+  // Whether the logged-in student has an APPROVED payment for this course.
+  // Controls whether curriculum/live-class/exam actions are unlocked below —
+  // titles stay visible either way, only the actual content is gated.
+  const { isEnrolled } = useEnrollmentStatus(categoryId);
 
   const loadCourseDetails = useCallback(async () => {
     setIsLoading(true);
@@ -544,6 +607,10 @@ const CourseDetails = () => {
 
   const handleBack = () => navigate("/student/browse-courses");
 
+  // Both the hero and sidebar "Enroll Now" buttons route here — payment
+  // is handled on a dedicated page instead of enrolling immediately.
+  const handleEnroll = () => navigate(`/student/payment/${categoryId}`);
+
   if (isLoading) {
     return (
       <div className="course-details">
@@ -588,7 +655,7 @@ const CourseDetails = () => {
         category={category}
         stats={stats}
         imageFetcher={categoryService.getImage}
-        onEnroll={() => {}}
+        onEnroll={handleEnroll}
       />
 
       <div className="course-details__body">
@@ -610,6 +677,10 @@ const CourseDetails = () => {
             ))}
           </nav>
 
+          {!isEnrolled && activeTab !== "overview" && (
+            <EnrollmentBanner onEnroll={handleEnroll} />
+          )}
+
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -620,16 +691,25 @@ const CourseDetails = () => {
               className="course-tabs__panel"
             >
               {activeTab === "overview" && <CourseOverview category={category} />}
-              {activeTab === "curriculum" && <CurriculumTab contents={contents} />}
-              {activeTab === "live" && <LiveClassesTab liveClasses={liveClasses} />}
+              {activeTab === "curriculum" && (
+                <CurriculumTab contents={contents} isEnrolled={isEnrolled} />
+              )}
+              {activeTab === "live" && (
+                <LiveClassesTab liveClasses={liveClasses} isEnrolled={isEnrolled} />
+              )}
               {activeTab === "exams" && (
-                <ExamsTab exams={exams} categoryId={categoryId} navigate={navigate} />
+                <ExamsTab
+                  exams={exams}
+                  categoryId={categoryId}
+                  navigate={navigate}
+                  isEnrolled={isEnrolled}
+                />
               )}
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <CourseSidebar category={category} stats={stats} onBack={handleBack} />
+        <CourseSidebar category={category} stats={stats} onBack={handleBack} onEnroll={handleEnroll} />
       </div>
     </div>
   );

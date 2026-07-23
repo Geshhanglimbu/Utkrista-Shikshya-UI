@@ -821,3 +821,142 @@
     font-size: 0.72rem;
   }
 }
+/* ============================================================
+ * Append these to CourseDetails.css — styles for locked
+ * (not-yet-enrolled) curriculum, live class, and exam items.
+ * ============================================================ */
+
+/* ---------- Enrollment banner ---------- */
+.enrollment-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #eaf0ff;
+  border: 1.5px solid #c7d5ff;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+
+.enrollment-banner__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #2952e3;
+  flex-shrink: 0;
+}
+
+.enrollment-banner__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.enrollment-banner__title {
+  font-weight: 700;
+  font-size: 14.5px;
+  margin: 0 0 2px;
+  color: #1a1d29;
+}
+
+.enrollment-banner__subtitle {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.enrollment-banner__cta {
+  background: #2952e3;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.enrollment-banner__cta:hover {
+  background: #1e3fc4;
+}
+
+/* ---------- Locked lesson (curriculum tab) ---------- */
+.lesson-card--locked {
+  opacity: 0.85;
+}
+
+.lesson-card--locked .lesson-card__icon {
+  background: #f1f2f6;
+  color: #9098a8;
+}
+
+.lesson-card__locked-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #9098a8;
+  padding: 10px 0 4px;
+  margin: 0;
+}
+
+/* ---------- Locked live class ---------- */
+.live-card--locked {
+  opacity: 0.85;
+}
+
+.live-card--locked .live-card__icon {
+  background: #f1f2f6;
+  color: #9098a8;
+}
+
+.live-card__join--locked {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f2f6;
+  color: #9098a8;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
+/* ---------- Locked exam ---------- */
+.exam-card--locked {
+  opacity: 0.85;
+}
+
+.exam-card--locked .exam-card__icon {
+  background: #f1f2f6;
+  color: #9098a8;
+}
+
+.exam-card__start--locked {
+  background: #f1f2f6 !important;
+  color: #6b7280 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.exam-card__start--locked:hover {
+  background: #e5e8f0 !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .enrollment-banner {
+    flex-wrap: wrap;
+  }
+
+  .enrollment-banner__cta {
+    width: 100%;
+  }
+}

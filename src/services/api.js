@@ -132,13 +132,56 @@ export const categoryService = {
       config
     ),
 };
-  export const paymentService = {
-    checkPayment: (userId, categoryId, config) => api.get(`/payment/check/user/${userId}/category/${categoryId}`, config),
-    approve: (id, config) => api.post(`/payment/approve/${id}`, null, config),
-    reject: (id, config) => api.post(`/payment/reject/${id}`, null, config),
-    getMonthlyRevenue: (config) => api.get("/payment/monthly/revenue", config),
-  }
+  // ======================
+// Payment Service
+// ======================
 
+export const paymentService = {
+  // Create Payment
+  create: (userId, categoryId, data, config) =>
+    api.post(`/user/${userId}/category/${categoryId}/payment`, data, config),
+
+  // Upload Payment Screenshot
+  uploadFile: (paymentId, formData, config) =>
+    api.post(`/payment/file/upload/${paymentId}`, formData, {
+      ...config,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+
+  // Get Uploaded Payment Screenshot
+  getImage: (fileName, config) =>
+    api.get(`/categories/image/${fileName}`, {
+      ...config,
+      responseType: "blob",
+    }),
+
+  // Check Payment Status
+  checkPayment: (userId, categoryId, config) =>
+    api.get(`/payment/check/user/${userId}/category/${categoryId}`, config),
+
+  // Approve Payment
+  approve: (paymentId, config) =>
+    api.post(`/payment/approve/${paymentId}`, null, config),
+
+  // Reject Payment
+  reject: (paymentId, config) =>
+    api.post(`/payment/reject/${paymentId}`, null, config),
+
+  // Revenue Reports
+  getDailyRevenue: (config) =>
+    api.get("/payment/daily", config),
+
+  getWeeklyRevenue: (config) =>
+    api.get("/payment/weekly", config),
+
+  getMonthlyRevenue: (config) =>
+    api.get("/payment/monthly/revenue", config),
+
+  getYearlyRevenue: (config) =>
+    api.get("/payment/yearly", config),
+};
   export const contentService = {
     create: (userId, categoryId, data, config) => api.post(`/user/${userId}/category/${categoryId}/posts`, data, config),
     getByCategoryId: (categoryId, config) => api.get(`/category/${categoryId}`, config),
