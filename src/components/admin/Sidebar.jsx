@@ -16,7 +16,6 @@ const navItems = [
   { to: '/admin/live-classes', label: 'Live Classes', icon: Video },
   {to: '/admin/booking', label: 'Booking', icon: CreditCard},
   { to: '/admin/exam-management', label: 'Exam Management', icon: Image },
-  { to: '/admin/grading', label: 'Grading', icon: GraduationCap },
   { to: '/admin/settings', label: 'Settings', icon: Settings },
 
 ]
