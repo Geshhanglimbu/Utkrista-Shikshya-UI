@@ -36,6 +36,7 @@ import BrowseCourses from "./student/pages/BrowseCourses";
 import CourseDetails from "./student/pages/CourseDetails";
 import StudentExams from "./student/pages/StudentExams";
 import StudentPayment from "./student/pages/StudentPayment";
+import Notifications from "./student/pages/Notifications";
 // ====================
 // Teacher
 // ====================
@@ -89,6 +90,7 @@ function App() {
               <Route path="course/:categoryId" element={<CourseDetails />} />
               <Route path="exams" element={<StudentExams />} />
               <Route path="payment/:categoryId" element={<StudentPayment />} />
+              <Route path="notifications" element={<Notifications />} />
             </Route>
           </Route>
 

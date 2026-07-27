@@ -284,5 +284,50 @@ export const bookingService = {
   checkBooked: (userId, categoryId, config) =>
     api.get(`/check/user/${userId}/category/${categoryId}`, config),
 };
+// ======================
+// Notification Service
+// ======================
+
+export const notificationService = {
+  // Create notification for subscribers of a category
+  createForSubscribers: (userId, categoryId, data, config) =>
+    api.post(
+      `/user/${userId}/category/${categoryId}/notices`,
+      data,
+      config
+    ),
+
+  // Create notification for all users
+  createForAll: (userId, data, config) =>
+    api.post(`/user/${userId}/notices`, data, config),
+
+  // Get all notifications for a user
+  getAllForUser: (userId, config) =>
+    api.get(`/user/${userId}/notices`, config),
+
+  // Mark notification as read
+  markAsRead: (userId, noticeId, config) =>
+    api.post(`/user/${userId}/notices/${noticeId}/read`, null, config),
+
+  // Check if a notification has been seen/read
+  checkSeen: (userId, noticeId, config) =>
+    api.get(`/user/${userId}/notice/${noticeId}/seen`, config),
+
+  // Get notifications by faculty/category
+  getByFaculty: (userId, facultyName, config) =>
+    api.get(
+      `/notices/user/${userId}/faculty/${encodeURIComponent(facultyName)}`,
+      config
+    ),
+
+  // Get unread notification count
+  getUnreadCount: (userId, noticeType = "FOR_ALL", config) =>
+    api.get(
+      `/user/${userId}/notice/${encodeURIComponent(
+        noticeType
+      )}/unread-count`,
+      config
+    ),
+};
  
   export default api
