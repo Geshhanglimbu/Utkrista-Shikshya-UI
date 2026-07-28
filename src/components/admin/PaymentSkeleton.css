@@ -1,0 +1,41 @@
+/* components/payment/PaymentSkeleton.css */
+
+.skel {
+  border-radius: 6px;
+  background: var(--color-border);
+  animation: skel-pulse 1.4s ease-in-out infinite;
+}
+
+.skel--circle { border-radius: 50%; }
+
+.skel-row td {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.skel-row__student {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.skel-row__avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.skel-row__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+@keyframes skel-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@media (max-width: 480px) {
+  .skel-row td { padding: 12px; }
+}

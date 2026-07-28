@@ -1,0 +1,86 @@
+/* components/payment/PaymentStats.css */
+
+.payment-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+  transition: box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.stat-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-card__icon-badge {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+}
+
+.stat-card__icon-badge svg {
+  width: 20px;
+  height: 20px;
+}
+
+.stat-card__icon-badge--blue { background: var(--color-primary-light); color: var(--color-primary); }
+.stat-card__icon-badge--green { background: var(--color-approved-bg); color: var(--color-approved); }
+.stat-card__icon-badge--red { background: var(--color-rejected-bg); color: var(--color-rejected); }
+
+.stat-card__value {
+  margin-top: 16px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+}
+
+.stat-card__value-skeleton {
+  margin-top: 16px;
+  height: 28px;
+  width: 64px;
+  border-radius: 6px;
+  background: var(--color-border);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.stat-card__label {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive: 4 -> 2 -> 1 columns */
+@media (max-width: 1024px) {
+  .payment-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .payment-stats { grid-template-columns: 1fr; }
+  .stat-card { padding: 16px; }
+  .stat-card__value { font-size: 22px; }
+}
+
+@media (max-width: 360px) {
+  .stat-card__icon-badge { width: 36px; height: 36px; }
+}

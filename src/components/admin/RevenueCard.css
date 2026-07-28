@@ -1,0 +1,154 @@
+/* components/payment/RevenueCard.css */
+
+.revenue-card {
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  padding: 16px;
+}
+
+.revenue-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.revenue-card__label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.revenue-card__icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-primary);
+}
+
+.revenue-card__value {
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+}
+
+.revenue-card__skeleton {
+  margin-top: 8px;
+  height: 24px;
+  width: 80px;
+  border-radius: 6px;
+  background: var(--color-border);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+/* Hero variant — the big blue gradient monthly revenue card */
+.revenue-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-darker) 100%);
+  box-shadow: var(--shadow-lg);
+}
+
+.revenue-hero__blob-1 {
+  position: absolute;
+  top: -32px;
+  right: -32px;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.revenue-hero__blob-2 {
+  position: absolute;
+  bottom: -40px;
+  left: -16px;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.revenue-hero__row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.revenue-hero__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.revenue-hero__value {
+  margin-top: 8px;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.revenue-hero__skeleton {
+  margin-top: 12px;
+  height: 32px;
+  width: 112px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.revenue-hero__icon-badge {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
+.revenue-hero__icon-badge svg {
+  width: 20px;
+  height: 20px;
+}
+
+.revenue-hero__trend {
+  position: relative;
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .revenue-hero__value { font-size: 26px; }
+}
+
+@media (max-width: 768px) {
+  .revenue-card,
+  .revenue-hero { padding: 18px; }
+}
+
+@media (max-width: 480px) {
+  .revenue-hero__value { font-size: 22px; }
+  .revenue-hero__icon-badge { width: 36px; height: 36px; }
+}
+
+@media (max-width: 360px) {
+  .revenue-hero,
+  .revenue-card { padding: 14px; }
+  .revenue-hero__value { font-size: 20px; }
+}

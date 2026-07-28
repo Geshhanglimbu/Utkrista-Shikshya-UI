@@ -160,14 +160,16 @@ export const paymentService = {
   // Check Payment Status
   checkPayment: (userId, categoryId, config) =>
     api.get(`/payment/check/user/${userId}/category/${categoryId}`, config),
+  
+  getAllPayments: (config) => api.get("/payment/payments", config),
 
   // Approve Payment
   approve: (paymentId, config) =>
-    api.post(`/payment/approve/${paymentId}`, null, config),
+    api.put(`/payment/approve/${paymentId}`, null, config),
 
   // Reject Payment
   reject: (paymentId, config) =>
-    api.post(`/payment/reject/${paymentId}`, null, config),
+    api.put(`/payment/reject/${paymentId}`, null, config),
 
   // Revenue Reports
   getDailyRevenue: (config) =>
