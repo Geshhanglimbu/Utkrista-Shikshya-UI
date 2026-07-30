@@ -116,34 +116,40 @@ const role =
 console.log(role);
 // Redirect based on role
 setTimeout(() => {
+  console.log("Role:", role);
+
   switch (role) {
     case "ROLE_ADMIN":
+    case "ROLE_SUBSCRIBED":
+      console.log("Navigating to admin dashboard");
       navigate("/admin/dashboard");
       break;
-    case "ROLE_NORMAL":
-    console.log("Navigating to student dashboard...");
 
+    case "ROLE_NORMAL":
+      console.log("Navigating to student dashboard");
       navigate("/student/dashboard");
       break;
 
     case "ROLE_TEACHER":
+      console.log("Navigating to teacher dashboard");
       navigate("/teacher/dashboard");
       break;
 
     default:
-      toast.error("Unknown user role.");
+      console.log("Unknown role");
       navigate("/");
   }
 }, 1500);
 
-  } catch (error) {
-    setStatus("idle");
-    setShowBanner(true);
+  } 
+  catch (error) {
+  console.log("Status:", error.response?.status);
+  console.log("Response:", error.response?.data);
 
-    setErrors({
-      api: error.response?.data?.message || "Login failed"
-    });
-  }
+  setStatus("idle");
+
+  toast.error(error.response?.data?.message || "Login failed");
+}
 };
 
   if (status === "success") return <LoginSuccess firstName={username || "Student"} />;
