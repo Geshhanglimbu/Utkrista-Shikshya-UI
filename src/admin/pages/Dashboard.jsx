@@ -269,24 +269,6 @@ const studentCount = useMemo(() => {
             </div>
           ))}
         </div>
-
-        <div className="widget card">
-          <div className="widget__head">
-            <h4>Needs Your Attention</h4>
-          </div>
-          <div className="widget-row">
-            
-          </div>
-          <div className="widget-row">
-            <div className="widget-avatar" style={{ background: '#DBEAFE', color: '#2563EB' }}>
-              <FileCheck2 size={16} />
-            </div>
-            <div className="widget-row__text">
-              <strong>Course approvals</strong>
-              <span>Check submissions from teachers</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   )
