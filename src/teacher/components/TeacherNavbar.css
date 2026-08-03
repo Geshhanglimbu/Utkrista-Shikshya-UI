@@ -1,0 +1,201 @@
+/* TeacherNavbar.css */
+
+.tl-navbar {
+  height: var(--tl-navbar-h);
+  background: #fff;
+  border-bottom: 1px solid var(--tl-border);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 clamp(16px, 3vw, 32px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.tl-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--tl-text);
+  cursor: pointer;
+  padding: 6px;
+}
+
+.tl-navbar-search {
+  flex: 1;
+  max-width: 420px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tl-navbar-search svg {
+  position: absolute;
+  left: 14px;
+  color: var(--tl-text-muted);
+  font-size: 16px;
+}
+
+.tl-navbar-search input {
+  width: 100%;
+  padding: 10px 14px 10px 40px;
+  border-radius: 12px;
+  border: 1px solid var(--tl-border);
+  background: #f7f8fc;
+  font-size: 13.5px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.tl-navbar-search input:focus {
+  border-color: var(--tl-primary);
+  background: #fff;
+}
+
+.tl-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.tl-online-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--tl-success);
+  background: #eafaf0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.tl-online-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tl-success);
+}
+
+.tl-bell-btn {
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 19px;
+  color: var(--tl-text-muted);
+  cursor: pointer;
+  padding: 6px;
+}
+
+.tl-bell-btn:hover {
+  color: var(--tl-text);
+}
+
+.tl-bell-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tl-navbar-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--tl-border);
+}
+
+.tl-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tl-profile-text {
+  text-align: right;
+}
+
+.tl-profile-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--tl-text);
+}
+
+.tl-profile-sub {
+  font-size: 11.5px;
+  color: var(--tl-text-muted);
+  margin-top: 1px;
+}
+
+.tl-profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--tl-primary-tint);
+}
+
+.tl-profile-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tl-primary-tint);
+  color: var(--tl-primary);
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .tl-menu-btn {
+    display: inline-flex;
+  }
+
+  .tl-profile-text {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .tl-navbar {
+    gap: 10px;
+    padding: 0 14px;
+  }
+
+  .tl-navbar-search {
+    max-width: none;
+  }
+
+  .tl-online-badge span:last-child {
+    display: none;
+  }
+
+  .tl-online-badge {
+    padding: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tl-navbar-search input::placeholder {
+    font-size: 12px;
+  }
+
+  .tl-online-badge {
+    display: none;
+  }
+}

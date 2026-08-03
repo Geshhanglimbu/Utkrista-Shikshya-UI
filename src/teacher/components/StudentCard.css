@@ -1,0 +1,136 @@
+/* StudentCard.css */
+
+.tsm-card {
+  background: var(--tsm-card);
+  border: 1px solid var(--tsm-border);
+  border-radius: var(--tsm-radius-lg);
+  padding: 22px;
+  box-shadow: var(--tsm-shadow);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.22s ease,
+    border-color 0.22s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tsm-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--tsm-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.tsm-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--tsm-shadow-hover);
+  border-color: rgba(41, 82, 227, 0.25);
+}
+
+.tsm-card:hover::before {
+  transform: scaleX(1);
+}
+
+.tsm-card:focus-visible {
+  outline: 2px solid var(--tsm-primary);
+  outline-offset: 2px;
+}
+
+.tsm-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tsm-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--tsm-primary-tint);
+  color: var(--tsm-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--tsm-border);
+}
+
+.tsm-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tsm-badge-success { background: var(--tsm-success-tint); color: var(--tsm-success); }
+.tsm-badge-warning { background: var(--tsm-warning-tint); color: var(--tsm-warning); }
+.tsm-badge-danger  { background: var(--tsm-danger-tint);  color: var(--tsm-danger); }
+.tsm-badge-neutral { background: var(--tsm-neutral-tint); color: var(--tsm-neutral); }
+
+.tsm-card-name {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 15.5px;
+  margin: 0 0 3px;
+  color: var(--tsm-text);
+  letter-spacing: -0.01em;
+}
+
+.tsm-card-email {
+  font-size: 13px;
+  color: var(--tsm-text-muted);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tsm-card-id {
+  font-size: 11.5px;
+  color: var(--tsm-text-muted);
+  margin-top: 4px;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.01em;
+}
+
+.tsm-card-divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--tsm-border), transparent 90%);
+}
+
+.tsm-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+  color: var(--tsm-text-muted);
+}
+
+.tsm-card-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--tsm-neutral-tint);
+}
+
+.tsm-card-meta-item strong {
+  color: var(--tsm-text);
+  font-weight: 700;
+}

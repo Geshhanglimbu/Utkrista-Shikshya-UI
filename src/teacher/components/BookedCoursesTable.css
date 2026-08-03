@@ -1,0 +1,67 @@
+/* BookedCoursesTable.css */
+
+.tsd-table-wrap {
+  overflow-x: auto;
+}
+
+.tsd-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  min-width: 680px;
+}
+
+.tsd-table th {
+  text-align: left;
+  padding: 10px 14px;
+  color: var(--tsd-text-muted);
+  font-weight: 600;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--tsd-bg);
+  border-bottom: 1px solid var(--tsd-border);
+}
+
+.tsd-table th:first-child { border-radius: 8px 0 0 8px; }
+.tsd-table th:last-child { border-radius: 0 8px 8px 0; }
+
+.tsd-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--tsd-border);
+  color: var(--tsd-text);
+  vertical-align: middle;
+}
+
+.tsd-table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.tsd-table tbody tr:hover {
+  background: var(--tsd-bg);
+}
+
+.tsd-table tr:last-child td {
+  border-bottom: none;
+}
+
+.tsd-view-payment-btn {
+  background: var(--tsd-primary-tint);
+  color: var(--tsd-primary);
+  border: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.tsd-view-payment-btn:hover {
+  background: #dfe6fc;
+}
+
+.tsd-view-payment-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

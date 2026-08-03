@@ -1,0 +1,30 @@
+/* TeacherLayout.css — shell only. See TeacherSidebar.css and
+   TeacherNavbar.css for their respective component styles. */
+
+.tl-shell {
+  --tl-primary: #2952e3;
+  --tl-primary-dark: #1f3fb8;
+  --tl-primary-tint: #eef2ff;
+  --tl-success: #16a34a;
+  --tl-border: #e6e9f2;
+  --tl-text: #101828;
+  --tl-text-muted: #667085;
+  --tl-sidebar-w: 260px;
+  --tl-navbar-h: 72px;
+
+  display: flex;
+  min-height: 100vh;
+  background: #f7f8fc;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.tl-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.tl-content {
+  flex: 1;
+}

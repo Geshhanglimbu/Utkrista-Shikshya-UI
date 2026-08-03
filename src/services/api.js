@@ -74,8 +74,35 @@ import axios from 'axios'
     getById: (id, config) => api.get(`/users/${id}`, config),
     update: (id, data, config) => api.put(`/users/${id}`, data, config),
     remove: (id, config) => api.delete(`/users/${id}`, config),
-    addRoleByEmail: (email, role, config) =>api.post(`/users/addRole/email/${encodeURIComponent(email)}/role/${encodeURIComponent(role)}`, null, config)
-  };
+   // Get user by email
+  getByEmail: (email, config) =>
+    api.get(`/users/email/${encodeURIComponent(email)}`, config),
+
+  // Add role to user
+  addRoleByEmail: (email, role, config) =>
+    api.post(
+      `/users/addRole/email/${encodeURIComponent(email)}/role/${encodeURIComponent(role)}`,
+      null,
+      config
+    ),
+
+  // Get all users having a specific role
+  getUsersByRole: (role, config) =>
+    api.get(
+      `/users/role/${encodeURIComponent(role)}`,
+      config
+    ),
+
+    // Get all teachers and subscribers with their faculties
+    getTeachersAndSubscribers: (config) =>
+      api.get(`/users/teachers-and-subscribers`, config),
+
+    assignFaculty: (userId, faculty) =>
+  api.put(`/users/${userId}/faculty`, {
+    facult: [faculty],
+  }),
+};
+  
 
 export const categoryService = {
   // Get all categories
@@ -265,27 +292,7 @@ export const examService = {
     api.delete(`/exams/${examId}`),
 };
 
-// ======================
-// Booking Service
-// ======================
 
-export const bookingService = {
-  // Create Booking
-  create: (userId, categoryId, data, config) =>
-    api.post(`/user/${userId}/category/${categoryId}/bookeds`, data, config),
-
-  // Get All Bookings
-  getAll: (params, config) =>
-    api.get("/bookeds", { params, ...config }),
-
-  // Get Bookings By User ID
-  getByUserId: (userId, config) =>
-    api.get(`/booked/user/${userId}`, config),
-
-  // Check Booking Status
-  checkBooked: (userId, categoryId, config) =>
-    api.get(`/check/user/${userId}/category/${categoryId}`, config),
-};
 // ======================
 // Notification Service
 // ======================
@@ -331,5 +338,25 @@ export const notificationService = {
       config
     ),
 };
- 
+ // ======================
+// Booking Service
+// ======================
+
+export const bookingService = {
+  // Create Booking
+  create: (userId, categoryId, data, config) =>
+    api.post(`/user/${userId}/category/${categoryId}/bookeds`, data, config),
+
+  // Get All Bookings
+  getAll: (params, config) =>
+    api.get("/bookeds", { params, ...config }),
+
+  // Get Bookings By User ID
+  getByUserId: (userId, config) =>
+    api.get(`/booked/user/${userId}`, config),
+
+  // Check Booking Status
+  checkBooked: (userId, categoryId, config) =>
+    api.get(`/check/user/${userId}/category/${categoryId}`, config),
+};
   export default api

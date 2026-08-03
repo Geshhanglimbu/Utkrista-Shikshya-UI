@@ -1,0 +1,28 @@
+/* StudentFilters.css */
+
+.tsm-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tsm-filter-select {
+  padding: 10px 32px 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--tsm-border);
+  background: var(--tsm-card);
+  font-size: 13.5px;
+  font-family: inherit;
+  color: var(--tsm-text);
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color 0.15s ease;
+}
+
+.tsm-filter-select:focus {
+  border-color: var(--tsm-primary);
+}

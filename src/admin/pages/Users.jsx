@@ -9,7 +9,7 @@ import Badge from '../../components/admin/Badge'
 import Drawer from '../../components/admin/Drawer'
 import Modal from '../../components/admin/Modal'
 import './Users.css'
-import { userService } from '../../services/api'
+import { userService, categoryService } from '../../services/api'
 
 
 const PAGE_SIZE = 5
@@ -27,6 +27,8 @@ export default function Users() {
   const [emailSearch, setEmailSearch] = useState("");
   const [searchedUser, setSearchedUser] = useState(null);
   const [selectedRole, setSelectedRole] = useState("");
+  const [selectedFaculty, setSelectedFaculty] = useState("");
+  const [faculties, setFaculties] = useState([]);
 
   const loadUsers = useCallback(async () => {
     try {
@@ -38,6 +40,10 @@ export default function Users() {
         : response.data?.data || []
 
       setUsers(data)
+     data.forEach(user => {
+    console.log(user.name);
+    console.log(user.facult);
+});
     } catch (error) {
       console.error(error)
     } finally {
@@ -49,6 +55,23 @@ export default function Users() {
     loadUsers()
   }, [loadUsers])
 
+  useEffect(() => {
+    const loadFaculties = async () => {
+        try {
+            const res = await categoryService.getAll();
+
+        const data = Array.isArray(res.data)
+          ? res.data
+          : res.data?.data || [];
+
+        setFaculties(data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    loadFaculties();
+}, []);
 
   const filtered = useMemo(() => {
     if (!Array.isArray(users)) return []
@@ -109,13 +132,49 @@ export default function Users() {
     );
   };
 
+
+
   const handleRoleChange = async () => {
-    if (!searchedUser || !searchedUser.email) return
-    try {
-      await userService.addRoleByEmail(
-        searchedUser.email.trim(),
-        `ROLE_${selectedRole.toUpperCase()}`
-      );
+  if (!searchedUser || !searchedUser.email) return;
+
+  if (selectedRole === "Teacher" && !selectedFaculty) {
+    toast.error("Please select a faculty");
+    return;
+  }
+
+  try {
+   let roleToSend = "";
+
+switch (selectedRole) {
+  case "Student":
+    roleToSend = "ROLE_NORMAL";
+    break;
+
+  case "Teacher":
+    roleToSend = "ROLE_TEACHER";
+    break;
+
+  case "Admin":
+    roleToSend = "ROLE_ADMIN";
+    break;
+
+  default:
+    roleToSend = selectedRole;
+}
+
+console.log("selectedRole =", JSON.stringify(selectedRole));
+console.log("roleToSend =", roleToSend);
+await userService.addRoleByEmail(
+    searchedUser.email,
+    roleToSend
+);
+
+if (selectedRole === "Teacher") {
+    await userService.assignFaculty(
+        searchedUser.id,
+        selectedFaculty
+    );
+}
 
       toast.success("Role updated");
       loadUsers();
@@ -124,8 +183,17 @@ export default function Users() {
       setSearchedUser(null);
       setEmailSearch("");
     } catch (error) {
-      console.error(error)
-    }
+    console.error(error);
+
+    console.log("Status:", error.response?.status);
+    console.log("Response:", error.response?.data);
+
+    toast.error(
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed to update role"
+    );
+}
   };
 
   const collegesList = useMemo(() => {
@@ -147,6 +215,14 @@ export default function Users() {
       ),
     },
     { key: 'collegename', header: 'Institution' },
+    {
+    key: "faculty",
+    header: "Faculty",
+    render: (u) =>
+      u.facult?.length
+        ? u.facult.join(", ")
+        : "-"
+    },
     { key: 'role', header: 'Role', render: (u) => <Badge>{u.roles?.[0]?.name?.replace("ROLE_", "") || u.role || "-"}</Badge> },
     { key: 'joined',header: 'Joined',render: (u) => {
       if (!u.dateOfRegistration) return "-"
@@ -172,9 +248,10 @@ export default function Users() {
                 setEmailSearch(u.email);
                 setSearchedUser(u);
                 const rawRole = u.roles?.[0]?.name || u.role || "";
-                setSelectedRole(
-                    rawRole.replace("ROLE_", "") || "Student"
-                );
+
+                  setSelectedRole(
+                      rawRole.replace("ROLE_", "")
+                  );
                 setChangeRoleModal(true);
             }}
         >
@@ -191,13 +268,13 @@ export default function Users() {
       return
     }
     const csv = [
-      ["Name", "Email", "Role", "College"],
       ...users.map(u => [
-        `"${(u.name || "").replace(/"/g, '""')}"`,
-        `"${(u.email || "").replace(/"/g, '""')}"`,
-        `"${(u.roles?.[0]?.name || u.role || "").replace(/"/g, '""')}"`,
-        `"${(u.collegename || "").replace(/"/g, '""')}"`
-      ])
+    `"${u.name}"`,
+    `"${u.email}"`,
+    `"${u.roles?.[0]?.name || u.role || ""}"`,
+    `"${u.facult?.join(", ") || ""}"`,
+    `"${u.collegename || ""}"`
+])
     ]
       .map(e => e.join(","))
       .join("\n")
@@ -275,6 +352,13 @@ export default function Users() {
             <dl>
               <dt>Email</dt><dd>{selectedUser.email}</dd>
               <dt>Institution</dt><dd>{selectedUser.collegename}</dd>
+              <dt>Faculty</dt>
+
+              <dd>
+                {selectedUser.facult?.length
+                  ? selectedUser.facult.join(", ")
+                  : "-"}
+              </dd>
               <dt>Role</dt><dd>{selectedUser.roles?.[0]?.name?.replace("ROLE_", "") || selectedUser.role || "-"}</dd>
               <dt>Joined</dt>
               <dd>
@@ -391,15 +475,37 @@ export default function Users() {
 
                   <label>Assign New Role</label>
 
-                  <Dropdown
-                      value={selectedRole}
-                      onChange={setSelectedRole}
-                      options={["Student","Teacher","Admin"]}
-                  />
+       <select
+  value={selectedRole}
+  onChange={(e) => {
+    console.log("Changed:", e.target.value);
+    setSelectedRole(e.target.value);
+  }}
+>
+  <option value="">Select Role</option>
+  <option value="Student">Student</option>
+  <option value="Teacher">Teacher</option>
+  <option value="Admin">Admin</option>
+</select>
 
+<p>Current state: {selectedRole}</p>
               </div>
 
           )}
+          {selectedRole === "Teacher" && (
+          <div className="role-select">
+
+        <label>Assign Faculty</label>
+
+        <Dropdown
+            value={selectedFaculty}
+            onChange={setSelectedFaculty}
+            options={faculties.map(f => f.categoryTitle)}
+            placeholder="Select Faculty"
+        />
+
+        </div>
+    )}
 
       </div>
 

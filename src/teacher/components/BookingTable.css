@@ -1,0 +1,130 @@
+.booking-table-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #eef1f6;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+  padding: 22px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.booking-table-card__header h3 {
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #101828;
+}
+
+.booking-table__scroll {
+  overflow-x: auto;
+  flex: 1;
+}
+
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 420px;
+}
+
+.booking-table thead th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #98a2b3;
+  background: #f6f8fc;
+  padding: 12px 14px;
+}
+
+.booking-table thead th:first-child {
+  border-radius: 8px 0 0 8px;
+}
+.booking-table thead th:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.booking-table tbody td {
+  padding: 14px;
+  border-bottom: 1px solid #f0f2f6;
+  font-size: 14px;
+  color: #344054;
+}
+
+.booking-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.booking-table__student {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: #101828;
+}
+
+.booking-table__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #e8edfc;
+  color: #2952e3;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.booking-table__empty {
+  text-align: center;
+  color: #98a2b3;
+  padding: 28px 0;
+}
+
+.booking-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.booking-badge--pending {
+  background: #fef4e6;
+  color: #b7791f;
+}
+
+.booking-badge--approved {
+  background: #e6f8ee;
+  color: #17a464;
+}
+
+.booking-badge--rejected {
+  background: #fde8ec;
+  color: #e0435a;
+}
+
+.booking-table__view-all {
+  margin-top: 16px;
+  align-self: flex-start;
+  border: none;
+  background: none;
+  color: #2952e3;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.booking-table__view-all:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .booking-table-card {
+    padding: 16px;
+  }
+}

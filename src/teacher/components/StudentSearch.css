@@ -1,0 +1,33 @@
+/* StudentSearch.css */
+
+.tsm-search {
+  flex: 1 1 280px;
+  position: relative;
+}
+
+.tsm-search input {
+  width: 100%;
+  padding: 11px 14px 11px 40px;
+  border-radius: 12px;
+  border: 1px solid var(--tsm-border);
+  background: var(--tsm-card);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--tsm-text);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tsm-search input:focus {
+  border-color: var(--tsm-primary);
+  box-shadow: 0 0 0 3px rgba(41, 82, 227, 0.12);
+}
+
+.tsm-search svg {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--tsm-text-muted);
+  font-size: 16px;
+}

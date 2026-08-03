@@ -1,0 +1,97 @@
+.student-overview-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #eef1f6;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+  padding: 22px;
+  height: 100%;
+}
+
+.student-overview-card__title {
+  margin: 0 0 20px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #101828;
+}
+
+.progress-row {
+  margin-bottom: 22px;
+}
+
+.progress-row__top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #344054;
+  margin-bottom: 8px;
+}
+
+.progress-row__value {
+  font-weight: 700;
+  color: #101828;
+}
+
+.progress-row__track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #eef1f6;
+  overflow: hidden;
+}
+
+.progress-row__fill {
+  height: 100%;
+  border-radius: 999px;
+  width: 0;
+  animation: fill-grow 1s ease forwards;
+}
+
+.progress-row__fill--blue {
+  background: #2952e3;
+}
+
+.progress-row__fill--indigo {
+  background: #6366f1;
+}
+
+@keyframes fill-grow {
+  from {
+    width: 0;
+  }
+}
+
+.student-overview__stat-row {
+  display: flex;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.student-overview__stat {
+  flex: 1;
+  background: #f6f8fc;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.student-overview__stat-label {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #98a2b3;
+}
+
+.student-overview__stat-value {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #101828;
+  font-family: "Poppins", "Inter", sans-serif;
+}
+
+@media (max-width: 480px) {
+  .student-overview__stat-row {
+    flex-direction: column;
+  }
+}

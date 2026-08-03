@@ -1,0 +1,90 @@
+/* EmptyState.css */
+
+/* Grid variant — used inside TeacherStudentManagement's card grid */
+.tsm-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--tsm-text-muted);
+  background: var(--tsm-card);
+  border: 1px dashed var(--tsm-border);
+  border-radius: var(--tsm-radius-lg);
+}
+
+.tsm-empty-icon {
+  font-size: 34px;
+  color: var(--tsm-primary);
+  margin-bottom: 12px;
+  opacity: 0.7;
+}
+
+.tsm-empty-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--tsm-text);
+  margin: 0 0 4px;
+}
+
+.tsm-retry-btn {
+  margin-top: 14px;
+  background: var(--tsm-primary);
+  color: #fff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.tsm-retry-btn:hover {
+  background: var(--tsm-primary-dark);
+}
+
+/* Section variant — used inside TeacherStudentDetails sections */
+.tsd-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--tsd-text-muted);
+}
+
+.tsd-empty-icon {
+  font-size: 30px;
+  color: var(--tsd-primary);
+  opacity: 0.6;
+  margin-bottom: 10px;
+}
+
+.tsd-empty-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--tsd-text);
+  margin: 0 0 3px;
+}
+
+.tsd-retry-btn {
+  margin-top: 14px;
+  background: var(--tsd-primary);
+  color: #fff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tsd-retry-btn:hover {
+  background: var(--tsd-primary-dark);
+}

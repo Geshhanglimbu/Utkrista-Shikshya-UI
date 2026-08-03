@@ -100,3 +100,16 @@
     grid-template-columns: 1fr;
   }
 }
+.content-title-link {
+  color: #3b57e6;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.content-title-link:hover {
+  color: #13151b;
+  transform: translateX(3px);
+  cursor: pointer;
+}

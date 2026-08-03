@@ -1,0 +1,236 @@
+/* TeacherStudentDetails.css
+   Page shell only — table, payment card, and faculty card each own their
+   own CSS file. */
+
+.tsd-page {
+  --tsd-primary: #2952e3;
+  --tsd-primary-dark: #1f3fb8;
+  --tsd-primary-tint: #eef2ff;
+  --tsd-success: #16a34a;
+  --tsd-success-tint: #eafaf0;
+  --tsd-warning: #d97706;
+  --tsd-warning-tint: #fff7ea;
+  --tsd-danger: #dc2626;
+  --tsd-danger-tint: #fdecec;
+  --tsd-neutral: #64748b;
+  --tsd-neutral-tint: #f1f5f9;
+  --tsd-border: #e6e9f2;
+  --tsd-text: #101828;
+  --tsd-text-muted: #667085;
+  --tsd-bg: #f7f8fc;
+  --tsd-card: #ffffff;
+  --tsd-radius-lg: 18px;
+  --tsd-radius-md: 12px;
+  --tsd-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px rgba(16, 24, 40, 0.06);
+
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--tsd-bg);
+  min-height: 100%;
+  padding: 24px clamp(16px, 4vw, 40px) 60px;
+  color: var(--tsd-text);
+}
+
+/* ---------- Breadcrumb + Back ---------- */
+.tsd-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--tsd-text-muted);
+  margin-bottom: 14px;
+}
+
+.tsd-breadcrumb .current {
+  color: var(--tsd-text);
+  font-weight: 600;
+}
+
+.tsd-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--tsd-primary);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 18px;
+}
+
+.tsd-back-btn:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Profile header ---------- */
+.tsd-profile-card {
+  background: linear-gradient(135deg, #ffffff 0%, #fbfcff 100%);
+  border: 1px solid var(--tsd-border);
+  border-radius: var(--tsd-radius-lg);
+  box-shadow: var(--tsd-shadow);
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tsd-profile-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--tsd-primary);
+}
+
+.tsd-avatar-lg {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--tsd-primary-tint);
+  color: var(--tsd-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px var(--tsd-border), 0 4px 14px rgba(41, 82, 227, 0.1);
+}
+
+.tsd-profile-info {
+  flex: 1 1 260px;
+}
+
+.tsd-profile-name {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tsd-profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 13.5px;
+  color: var(--tsd-text-muted);
+}
+
+.tsd-profile-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---------- Stat cards ---------- */
+.tsd-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.tsd-stat-card {
+  background: var(--tsd-card);
+  border: 1px solid var(--tsd-border);
+  border-radius: var(--tsd-radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--tsd-shadow);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.tsd-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--tsd-primary-tint);
+  color: var(--tsd-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.tsd-stat-value {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 21px;
+  line-height: 1.1;
+}
+
+.tsd-stat-label {
+  font-size: 12.5px;
+  color: var(--tsd-text-muted);
+  margin-top: 2px;
+}
+
+/* ---------- Section wrapper (shared by all three sections) ---------- */
+.tsd-section {
+  background: var(--tsd-card);
+  border: 1px solid var(--tsd-border);
+  border-radius: var(--tsd-radius-lg);
+  box-shadow: var(--tsd-shadow);
+  padding: 22px;
+  margin-bottom: 22px;
+}
+
+.tsd-section-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 16.5px;
+  margin: 0 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--tsd-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -0.01em;
+}
+
+/* Shared badge classes used by BookedCoursesTable, PaymentCard, FacultyCard */
+.tsd-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.tsd-badge-success { background: var(--tsd-success-tint); color: var(--tsd-success); }
+.tsd-badge-warning { background: var(--tsd-warning-tint); color: var(--tsd-warning); }
+.tsd-badge-danger  { background: var(--tsd-danger-tint);  color: var(--tsd-danger); }
+.tsd-badge-neutral { background: var(--tsd-neutral-tint); color: var(--tsd-neutral); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .tsd-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .tsd-profile-card { padding: 20px; }
+  .tsd-avatar-lg { width: 66px; height: 66px; font-size: 22px; }
+}
+
+@media (max-width: 480px) {
+  .tsd-page { padding: 18px 14px 48px; }
+  .tsd-stats { grid-template-columns: 1fr; }
+  .tsd-section { padding: 16px; }
+}

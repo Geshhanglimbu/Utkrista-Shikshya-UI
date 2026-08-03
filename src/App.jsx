@@ -40,8 +40,12 @@ import Notifications from "./student/pages/Notifications";
 // ====================
 // Teacher
 // ====================
-// import TeacherLayout from "./teacher/layouts/TeacherLayout";
-// import TeacherDashboard from "./teacher/pages/Dashboard";
+import TeacherStudentManagement from "./teacher/pages/TeacherStudentManagement";
+import TeacherStudentDetails from "./teacher/pages/TeacherStudentDetails";
+import TeacherLayout from "./teacher/components/TeacherLayout";
+import Dashboard from "./teacher/pages/Dashboard";
+
+
 
 function App() {
   return (
@@ -56,7 +60,7 @@ function App() {
           <Route path="/register" element={<Registration />} />
 
           {/* ================= ADMIN ROUTES ================= */}
-          <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN","ROLE_SUBSCRIBED"]} />}>
+          <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />}>
             <Route path="/admin" element={<AdminLayout />}>
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="users" element={<Users />} />
@@ -80,7 +84,7 @@ function App() {
           <Route
             element={
               <ProtectedRoute
-                allowedRoles={["ROLE_NORMAL"]}
+                allowedRoles={["ROLE_NORMAL","ROLE_SUBSCRIBED"]}
               />
             }
           >
@@ -95,11 +99,17 @@ function App() {
           </Route>
 
           {/* ================= TEACHER ROUTES ================= */}
-          {/* <Route element={<ProtectedRoute allowedRoles={["TEACHER"]} />}>
+          <Route element={<ProtectedRoute allowedRoles={["Role_TEACHER"]} />}>
             <Route path="/teacher" element={<TeacherLayout />}>
-              <Route path="dashboard" element={<TeacherDashboard />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              {/* <Route path="faculties" element={<TeacherFaculties />} />
+              <Route path="content" element={<TeacherContent />} />
+              <Route path="exams" element={<TeacherExams />} />
+              <Route path="live-classes" element={<TeacherLiveClasses />} /> */}
+              <Route path="students" element={<TeacherStudentManagement />} />
+
             </Route>
-          </Route> */}
+          </Route>
         </Routes>
       </BrowserRouter>
     </SidebarProvider>

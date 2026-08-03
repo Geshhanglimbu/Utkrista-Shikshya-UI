@@ -1,0 +1,14 @@
+/* LoadingSkeleton.css */
+
+.tsm-skel,
+.tsd-skel {
+  background: linear-gradient(90deg, #edf0f7 25%, #f5f7fb 37%, #edf0f7 63%);
+  background-size: 400% 100%;
+  animation: skel-shimmer 1.4s ease infinite;
+  border-radius: 8px;
+}
+
+@keyframes skel-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}

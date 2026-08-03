@@ -1,0 +1,73 @@
+/* PaymentCard.css */
+
+.tsd-payment-card {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  background: var(--tsd-bg);
+  border: 1px solid var(--tsd-border);
+  border-radius: var(--tsd-radius-md);
+  padding: 18px;
+  margin-top: 4px;
+}
+
+.tsd-payment-screenshot {
+  width: 160px;
+  height: 160px;
+  border-radius: var(--tsd-radius-md);
+  object-fit: cover;
+  border: 1px solid var(--tsd-border);
+  cursor: zoom-in;
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.tsd-payment-details {
+  flex: 1 1 220px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 20px;
+}
+
+.tsd-payment-field-label {
+  font-size: 11.5px;
+  color: var(--tsd-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 3px;
+}
+
+.tsd-payment-field-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--tsd-text);
+}
+
+/* Image preview lightbox */
+.tsd-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 24, 40, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 30px;
+  cursor: zoom-out;
+}
+
+.tsd-lightbox-overlay img {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+  .tsd-payment-card { flex-direction: column; }
+  .tsd-payment-screenshot { width: 100%; height: 200px; }
+}
+
+@media (max-width: 480px) {
+  .tsd-payment-details { grid-template-columns: 1fr; }
+}

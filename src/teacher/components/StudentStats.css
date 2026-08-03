@@ -1,0 +1,75 @@
+/* StudentStats.css */
+
+.tsm-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 24px 0 28px;
+}
+
+.tsm-stat-card {
+  background: var(--tsm-card);
+  border: 1px solid var(--tsm-border);
+  border-radius: var(--tsm-radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--tsm-shadow);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.tsm-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--tsm-shadow-hover);
+}
+
+.tsm-stat-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tsm-primary-tint);
+  color: var(--tsm-primary);
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.tsm-stat-card:nth-child(2) .tsm-stat-icon { background: var(--tsm-success-tint); color: var(--tsm-success); }
+.tsm-stat-card:nth-child(3) .tsm-stat-icon { background: var(--tsm-warning-tint); color: var(--tsm-warning); }
+.tsm-stat-card:nth-child(4) .tsm-stat-icon { background: var(--tsm-primary-tint); color: var(--tsm-primary); }
+
+.tsm-stat-value {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 23px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.tsm-stat-label {
+  font-size: 12.5px;
+  color: var(--tsm-text-muted);
+  margin-top: 3px;
+}
+
+@media (max-width: 1024px) {
+  .tsm-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .tsm-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tsm-stats {
+    grid-template-columns: 1fr;
+  }
+}

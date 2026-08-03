@@ -1,0 +1,101 @@
+/* TeacherStudentManagement.css
+   Page shell only — stat cards, search, filters, and student cards each own
+   their own CSS file. Design tokens follow the platform's established
+   system: primary #2952E3, Poppins (headings) / Inter (body), blue-white. */
+
+.tsm-page {
+  --tsm-primary: #2952e3;
+  --tsm-primary-dark: #1f3fb8;
+  --tsm-primary-tint: #eef2ff;
+  --tsm-success: #16a34a;
+  --tsm-success-tint: #eafaf0;
+  --tsm-warning: #d97706;
+  --tsm-warning-tint: #fff7ea;
+  --tsm-danger: #dc2626;
+  --tsm-danger-tint: #fdecec;
+  --tsm-neutral: #64748b;
+  --tsm-neutral-tint: #f1f5f9;
+  --tsm-border: #e6e9f2;
+  --tsm-text: #101828;
+  --tsm-text-muted: #667085;
+  --tsm-bg: #f7f8fc;
+  --tsm-card: #ffffff;
+  --tsm-radius-lg: 18px;
+  --tsm-radius-md: 12px;
+  --tsm-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px rgba(16, 24, 40, 0.06);
+  --tsm-shadow-hover: 0 4px 10px rgba(41, 82, 227, 0.08), 0 16px 32px rgba(41, 82, 227, 0.12);
+
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--tsm-bg);
+  min-height: 100%;
+  padding: 28px clamp(16px, 4vw, 40px) 60px;
+  color: var(--tsm-text);
+}
+
+.tsm-header {
+  margin-bottom: 26px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--tsm-border);
+}
+
+.tsm-title {
+  font-family: "Poppins", "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  color: var(--tsm-text);
+}
+
+.tsm-subtitle {
+  font-size: 14.5px;
+  color: var(--tsm-text-muted);
+  margin: 0;
+  max-width: 640px;
+  line-height: 1.55;
+}
+
+/* ---------- Toolbar (search + filters) ---------- */
+.tsm-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+/* ---------- Grid ---------- */
+.tsm-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+@media (max-width: 1024px) {
+  .tsm-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .tsm-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .tsm-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tsm-page {
+    padding: 20px 14px 48px;
+  }
+  .tsm-grid {
+    grid-template-columns: 1fr;
+  }
+  .tsm-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

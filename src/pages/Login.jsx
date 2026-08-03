@@ -120,17 +120,18 @@ setTimeout(() => {
 
   switch (role) {
     case "ROLE_ADMIN":
-    case "ROLE_SUBSCRIBED":
+    
       console.log("Navigating to admin dashboard");
       navigate("/admin/dashboard");
       break;
 
     case "ROLE_NORMAL":
+    case "ROLE_SUBSCRIBED":
       console.log("Navigating to student dashboard");
       navigate("/student/dashboard");
       break;
 
-    case "ROLE_TEACHER":
+    case "Role_TEACHER":
       console.log("Navigating to teacher dashboard");
       navigate("/teacher/dashboard");
       break;

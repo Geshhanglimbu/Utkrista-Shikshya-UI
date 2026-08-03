@@ -242,12 +242,8 @@ export default function Content() {
     
     { key: 'title', header: 'Title', render: (c) => (
     <Link
+        className= "content-title-link"
         to={`/admin/content/${c.id}`}
-        style={{
-            color: "#2952E3",
-            fontWeight: 600,
-            textDecoration: "none"
-        }}
     >
         {c.title}
     </Link>
