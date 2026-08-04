@@ -92,9 +92,12 @@ import axios from 'axios'
       `/users/role/${encodeURIComponent(role)}`,
       config
     ),
+    // get faculties by user ID
+    getFacultiesByUser: (userId) =>
+    api.get(`/users/${userId}/faculties`),
 
     // Get all teachers and subscribers with their faculties
-    getTeachersAndSubscribers: (config) =>
+    getFacultyTeachersAndSubscribers: (config) =>
       api.get(`/users/teachers-and-subscribers`, config),
 
     assignFaculty: (userId, faculty) =>

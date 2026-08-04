@@ -29,6 +29,7 @@ export default function Users() {
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedFaculty, setSelectedFaculty] = useState("");
   const [faculties, setFaculties] = useState([]);
+  const [facultyModal, setFacultyModal] = useState(false);
 
   const loadUsers = useCallback(async () => {
     try {
@@ -136,11 +137,7 @@ export default function Users() {
 
   const handleRoleChange = async () => {
   if (!searchedUser || !searchedUser.email) return;
-
-  if (selectedRole === "Teacher" && !selectedFaculty) {
-    toast.error("Please select a faculty");
-    return;
-  }
+  
 
   try {
    let roleToSend = "";
@@ -168,18 +165,11 @@ await userService.addRoleByEmail(
     searchedUser.email,
     roleToSend
 );
+     await loadUsers();
 
-if (selectedRole === "Teacher") {
-    await userService.assignFaculty(
-        searchedUser.id,
-        selectedFaculty
-    );
-}
+    toast.success("Role updated successfully");
 
-      toast.success("Role updated");
-      loadUsers();
-
-      setChangeRoleModal(false);
+    setChangeRoleModal(false);
       setSearchedUser(null);
       setEmailSearch("");
     } catch (error) {
@@ -194,8 +184,42 @@ if (selectedRole === "Teacher") {
         "Failed to update role"
     );
 }
-  };
+  }
 
+ const handleAssignFaculty = async () => {
+    if (!selectedUser) {
+        toast.error("No user selected");
+        return;
+    }
+
+    if (!selectedFaculty) {
+        toast.error("Please select a faculty");
+        return;
+    }
+
+    try {
+        await userService.assignFaculty(
+            selectedUser.id,
+            selectedFaculty
+        );
+
+        await loadUsers();
+
+        toast.success("Faculty assigned successfully");
+
+        setFacultyModal(false);
+        setSelectedFaculty("");
+        setSelectedUser(null);
+
+    } catch (error) {
+        console.error(error);
+
+        toast.error(
+            error.response?.data?.message ||
+            "Failed to assign faculty"
+        );
+    }
+};
   const collegesList = useMemo(() => {
     if (!Array.isArray(users)) return []
     return [...new Set(users.map(u => u.collegename).filter(Boolean))]
@@ -240,7 +264,19 @@ if (selectedRole === "Teacher") {
       render: (u) => (
         <div className="row-actions">
           <button className="btn-icon" title="View" onClick={() => setSelectedUser(u)}><Eye size={15} /></button>
-          <button className="btn-icon" title="Edit" onClick={() => toast.info("Edit feature coming soon")}><Pencil size={15} /></button>
+          <button
+          className="btn-icon"
+          title="Assign Faculty"
+          onClick={() => {
+              setSelectedUser(u);
+              setSelectedFaculty(
+                  u.facult?.[0] || ""
+              );
+              setFacultyModal(true);
+          }}
+      >
+          <Pencil size={15} />
+      </button>
           <button
             className="btn-icon"
             title="Change Role"
@@ -419,6 +455,7 @@ if (selectedRole === "Teacher") {
           </>
         }
       >
+      
 
       <div className="change-role-modal">
 
@@ -492,24 +529,40 @@ if (selectedRole === "Teacher") {
               </div>
 
           )}
-          {selectedRole === "Teacher" && (
-          <div className="role-select">
-
-        <label>Assign Faculty</label>
-
-        <Dropdown
-            value={selectedFaculty}
-            onChange={setSelectedFaculty}
-            options={faculties.map(f => f.categoryTitle)}
-            placeholder="Select Faculty"
-        />
-
-        </div>
-    )}
 
       </div>
 
       </Modal>
+      <Modal
+    open={facultyModal}
+    onClose={() => setFacultyModal(false)}
+    title="Assign Faculty"
+    footer={
+        <>
+            <button
+                className="btn btn-outline"
+                onClick={() => setFacultyModal(false)}
+            >
+                Cancel
+            </button>
+
+            <button
+                className="btn btn-primary"
+                onClick={handleAssignFaculty}
+            >
+                Save
+            </button>
+        </>
+    }
+>
+    <Dropdown
+        value={selectedFaculty}
+        onChange={setSelectedFaculty}
+        options={faculties.map(f => f.categoryTitle)}
+        placeholder="Select Faculty"
+    />
+</Modal>
+    
     </div>
   )
 }

@@ -44,6 +44,7 @@ import TeacherStudentManagement from "./teacher/pages/TeacherStudentManagement";
 import TeacherStudentDetails from "./teacher/pages/TeacherStudentDetails";
 import TeacherLayout from "./teacher/components/TeacherLayout";
 import Dashboard from "./teacher/pages/Dashboard";
+import TeacherContent from "./teacher/pages/TeacherContent";
 
 
 
@@ -102,10 +103,10 @@ function App() {
           <Route element={<ProtectedRoute allowedRoles={["Role_TEACHER"]} />}>
             <Route path="/teacher" element={<TeacherLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
-              {/* <Route path="faculties" element={<TeacherFaculties />} />
+              {/* <Route path="faculties" element={<TeacherFaculties />} /> */}
               <Route path="content" element={<TeacherContent />} />
-              <Route path="exams" element={<TeacherExams />} />
-              <Route path="live-classes" element={<TeacherLiveClasses />} /> */}
+              {/* <Route path="exams" element={<TeacherExams />} /> */}
+              {/* <Route path="live-classes" element={<TeacherLiveClasses />} /> */}
               <Route path="students" element={<TeacherStudentManagement />} />
 
             </Route>
